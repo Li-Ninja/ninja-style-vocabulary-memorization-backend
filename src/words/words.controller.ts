@@ -30,12 +30,12 @@ export class WordsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllWords(@Request() _req: Express.Request, @Response() res: Express.Response) {
+  findAll(@Request() _req: Express.Request, @Response() res: Express.Response) {
     res.json(this.wordList);
   }
 
   @Get('/:id')
-  getWord(@Param() params: { id: string }) {
+  findOne(@Param() params: { id: string }) {
     const noWord = {
       id: 0,
       word: '',
@@ -46,7 +46,7 @@ export class WordsController {
   }
 
   @Post()
-  addWord(@Body() createWordsDto: CreateWordsDto, @Response() res: Express.Response) {
+  create(@Body() createWordsDto: CreateWordsDto, @Response() res: Express.Response) {
     const { word, answer } = createWordsDto;
 
     console.info('addWord body', createWordsDto, word, answer);
