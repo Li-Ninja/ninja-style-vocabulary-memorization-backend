@@ -9,7 +9,7 @@ import {
   Request,
   Response
 } from '@nestjs/common';
-import { CreateWordsDto } from '../modules/words/dto/create-words.dto';
+import { CreateWordDto } from './dto/create-word.dto';
 import Express from 'express';
 
 @Controller('words')
@@ -46,7 +46,7 @@ export class WordsController {
   }
 
   @Post()
-  create(@Body() createWordsDto: CreateWordsDto, @Response() res: Express.Response) {
+  create(@Body() createWordsDto: CreateWordDto, @Response() res: Express.Response) {
     const { word, answer } = createWordsDto;
 
     console.info('addWord body', createWordsDto, word, answer);

@@ -1,4 +1,4 @@
-export class CreateWordsDto{
+export class CreateWordDto {
   readonly word:string;
   readonly answer:string;
 }
