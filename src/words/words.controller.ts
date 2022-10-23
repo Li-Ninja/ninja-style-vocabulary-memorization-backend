@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
   Param,
   Post,
@@ -28,8 +29,9 @@ export class WordsController {
   ];
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   getAllWords(@Request() _req: Express.Request, @Response() res: Express.Response) {
-    res.status(HttpStatus.OK).json(this.wordList);
+    res.json(this.wordList);
   }
 
   @Get('/:id')
