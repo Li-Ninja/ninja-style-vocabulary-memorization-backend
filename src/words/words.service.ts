@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HttpException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Word } from './entities/word.entity';
 import { CreateWordDto } from './dto/create-word.dto';
 
@@ -26,7 +26,7 @@ export class WordsService {
     const word = this.wordList.find(word => word.id === +id);
 
     if (!word) {
-      throw new HttpException('word not found.', 404);
+      throw new NotFoundException(`word #${id} not found.`);
     }
 
     return Promise.resolve(word);
