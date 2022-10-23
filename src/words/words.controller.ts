@@ -2,15 +2,15 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
   Param,
   Post,
   Request,
   Response
 } from '@nestjs/common';
-import { CreateWordsDto } from './dto/create-words.dto';
+import { CreateWordDto } from './dto/create-word.dto';
 import Express from 'express';
-
 
 @Controller('words')
 export class WordsController {
@@ -29,12 +29,13 @@ export class WordsController {
   ];
 
   @Get()
-  getAllWords(@Request() _req: Express.Request, @Response() res: Express.Response) {
-    res.status(HttpStatus.OK).json(this.wordList);
+  @HttpCode(HttpStatus.OK)
+  findAll(@Request() _req: Express.Request, @Response() res: Express.Response) {
+    res.json(this.wordList);
   }
 
   @Get('/:id')
-  getWord(@Param() params: { id: string }) {
+  findOne(@Param() params: { id: string }) {
     const noWord = {
       id: 0,
       word: '',
@@ -45,7 +46,7 @@ export class WordsController {
   }
 
   @Post()
-  addWord(@Body() createWordsDto: CreateWordsDto, @Response() res: Express.Response) {
+  create(@Body() createWordsDto: CreateWordDto, @Response() res: Express.Response) {
     const { word, answer } = createWordsDto;
 
     console.info('addWord body', createWordsDto, word, answer);
