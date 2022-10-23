@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Request,
   Response
@@ -34,7 +36,7 @@ export class WordsController {
     res.json(this.wordList);
   }
 
-  @Get('/:id')
+  @Get(':id')
   findOne(@Param() params: { id: string }) {
     const noWord = {
       id: 0,
@@ -65,4 +67,17 @@ export class WordsController {
       message: 'add success'
     })
   }
+
+  @Patch(':id')
+  // TODO patch
+  update(@Param('id') id: string, @Body() body: any) {
+    console.log('this is update ', id, body);
+  }
+
+  @Delete(':id')
+  // TODO: delete
+  remove(@Param('id') id: string) {
+    console.log('this is delete ', id);
+  }
+
 }
