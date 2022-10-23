@@ -8,9 +8,8 @@ import {
   Request,
   Response
 } from '@nestjs/common';
-import { CreateWordsDto } from './dto/create-words.dto';
+import { CreateWordsDto } from '../modules/words/dto/create-words.dto';
 import Express from 'express';
-
 
 @Controller('words')
 export class WordsController {
