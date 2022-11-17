@@ -11,32 +11,32 @@ import {
   Request,
   Response
 } from '@nestjs/common';
-import { WordsService } from './words.service';
+import { WordService } from './word.service';
 import { CreateWordDto } from './dto/create-word.dto';
 import Express from 'express';
 
-@Controller('words')
-export class WordsController {
-  constructor(private readonly wordsService: WordsService) {}
+@Controller('word')
+export class WordController {
+  constructor(private readonly wordService: WordService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll(@Request() _req: Express.Request, @Response() res: Express.Response) {
-    const data = await this.wordsService.findAll();
+    const data = await this.wordService.getAll();
 
     res.json(data);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const data = await this.wordsService.findOne(id);
+    const data = await this.wordService.getById(id);
 
     return data;
   }
 
   @Post()
   create(@Body() createWordsDto: CreateWordDto) {
-    return this.wordsService.create(createWordsDto);
+    return this.wordService.create(createWordsDto);
 
     // console.info('addWord body', createWordsDto, word, answer);
 
@@ -58,13 +58,13 @@ export class WordsController {
   @Patch(':id')
   // TODO patch
   update(@Param('id') id: string, @Body() body: any) {
-    return this.wordsService.update(id, body);
+    return this.wordService.update(id, body);
   }
 
   @Delete(':id')
   // TODO: delete
   remove(@Param('id') id: string) {
-    return this.wordsService.remove(id);
+    return this.wordService.remove(id);
   }
 
 }
