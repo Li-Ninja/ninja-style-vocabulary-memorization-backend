@@ -19,16 +19,16 @@ import Express from 'express';
 export class WordController {
   constructor(private readonly wordService: WordService) {}
 
-  @Get()
+  @Get('list')
   @HttpCode(HttpStatus.OK)
-  async findAll(@Request() _req: Express.Request, @Response() res: Express.Response) {
+  async getAll(@Request() _req: Express.Request, @Response() res: Express.Response) {
     const data = await this.wordService.getAll();
 
     res.json(data);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async getById(@Param('id') id: string) {
     const data = await this.wordService.getById(id);
 
     return data;
