@@ -1,38 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Word, WordDocument } from './word.schema';
 import { CreateWordDto } from './dto/create-word.dto';
+
 
 @Injectable()
 export class WordService {
-  private wordList: CreateWordDto[] = [
-    {
-    id: 1,
-    word: '火曜日',
-    answer: '星期二'
-  },
-  {
-    id: 2,
-    word: '水曜日',
-    answer: '星期三'
-  }
-  ];
+  constructor(
+    @InjectModel(Word.name) private wordModel: Model<WordDocument>,
+  ) {}
 
   getAll() {
-    return Promise.resolve(this.wordList);
+    return this.wordModel.find();
   }
 
   getById(id: string) {
-    const word = this.wordList.find(word => word.id === +id);
-
-    if (!word) {
-      throw new NotFoundException(`word #${id} not found.`);
-    }
-
-    return Promise.resolve(word);
+    return this.wordModel.findById(id);
   }
 
-  create(word: CreateWordDto) {
-    this.wordList.push(word);
+  async create(word: CreateWordDto) {
+    // TODO new word data
+    const newWord = await this.wordModel.create({
+      ...word,
+      reviewCount: 0,
+      createdAt: Date.now(),
+      updateAt: Date.now()
+    });
+
+    return newWord.save();
   }
 
   update(id: string, updateWordDto: any) {
@@ -44,10 +40,8 @@ export class WordService {
   }
 
   remove(id: string) {
-    const wordIndex = this.wordList.findIndex(word => word.id === +id);
-
-    if(wordIndex >= 0) {
-      this.wordList.splice(wordIndex, 1);
-    }
+    // TODO remove
+    console.log('remove', id);
+    // return this.wordModel.findOneAndRemove(id);
   }
 }
