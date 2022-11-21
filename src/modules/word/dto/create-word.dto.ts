@@ -4,9 +4,16 @@ import {
   IsNotEmpty
 } from 'class-validator';
 
+
 export class CreateWordDto {
   @IsNotEmpty()
-  readonly id: number;
+  @IsString()
+  @ApiProperty({
+    example: 'card',
+    format: 'string',
+    required: true
+  })
+  readonly type: WordText['type'];
 
   @IsNotEmpty()
   @IsString()
@@ -15,7 +22,7 @@ export class CreateWordDto {
     format: 'string',
     required: true
   })
-  readonly word:string;
+  readonly question: WordText['question'];
 
   @IsNotEmpty()
   @IsString()
@@ -24,5 +31,5 @@ export class CreateWordDto {
     format: 'string',
     required: true
   })
-  readonly answer:string;
+  readonly answer: WordText['answer'];
 }

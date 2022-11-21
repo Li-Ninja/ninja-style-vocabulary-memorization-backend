@@ -27,21 +27,21 @@ export class Word {
   })
   tags: string[];
 
-  @Prop({type: String, required: true })
+  @Prop({type: Number, required: true })
   @ApiProperty({
-    example: 'chinese',
-    format: 'string',
+    example: 1,
+    format: 'number',
     required: true
   })
-  nativeLanguage: string;
+  nativeLanguage: number;
 
-  @Prop({type: String, required: true })
+  @Prop({type: Number, required: true })
   @ApiProperty({
-    example: 'japanese',
-    format: 'string',
+    example: 2,
+    format: 'number',
     required: true
   })
-  learnLanguage: string;
+  learnLanguage: number;
 
   @Prop({type: Object, required: true })
   @ApiProperty({
@@ -65,6 +65,14 @@ export class Word {
   })
   isClosed: boolean;
 
+
+  @Prop({type: Date, required: true })
+  @ApiProperty({
+    example: '2022-07-18T16:00:00.000+00:00',
+    format: 'Date',
+    required: true
+  })
+  createAt: Date;
 
   @Prop({type: Date, required: true })
   @ApiProperty({

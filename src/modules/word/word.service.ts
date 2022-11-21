@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Word, WordDocument } from './word.schema';
 import { CreateWordDto } from './dto/create-word.dto';
-
+import { LanguageEnum } from 'src/enums/common.enum';
 
 @Injectable()
 export class WordService {
@@ -20,11 +20,16 @@ export class WordService {
   }
 
   async create(word: CreateWordDto) {
-    // TODO new word data
     const newWord = await this.wordModel.create({
-      ...word,
+      text: word,
       reviewCount: 0,
-      createdAt: Date.now(),
+      tags: [],
+      // TODO data from frontend
+      nativeLanguage: LanguageEnum.TraditionalChinese,
+      learnLanguage: LanguageEnum.Japanese,
+      isClosed: false,
+      createAt: Date.now(),
+      reviewAt: Date.now(),
       updateAt: Date.now()
     });
 
