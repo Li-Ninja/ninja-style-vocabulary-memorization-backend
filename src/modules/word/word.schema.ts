@@ -53,9 +53,7 @@ export class Word {
     format: 'Object',
     required: true
   })
-  // TODO can't get interface
-  // text: WordText
-  text: object;
+  text: WordText;
 
   @Prop({type: Boolean, required: true })
   @ApiProperty({
