@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Word, WordDocument } from './word.schema';
 import { CreateWordDto } from './dto/create-word.dto';
+import { UpdateWordDto } from './dto/update-word.dto';
 import { LanguageEnum } from 'src/enums/common.enum';
 
 @Injectable()
@@ -36,12 +37,13 @@ export class WordService {
     return newWord.save();
   }
 
-  update(id: string, updateWordDto: any) {
-    const word = this.getById(id);
-
-    if (word) {
-      console.log('do update word', word, updateWordDto);
+  update(id: string, updateWordDto: UpdateWordDto) {
+    const updatedData = {
+      text: updateWordDto,
+      updateAt: Date.now()
     }
+
+    return this.wordModel.findByIdAndUpdate(id, updatedData, { new: true });
   }
 
   remove(id: string) {

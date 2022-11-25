@@ -8,12 +8,17 @@ import {
   Param,
   Patch,
   Post,
-  Request,
-  Response
+  Req,
+  Res
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { WordService } from './word.service';
 import { CreateWordDto } from './dto/create-word.dto';
-import Express from 'express';
+import { UpdateWordDto } from './dto/update-word.dto';
+import {
+  Request,
+  Response
+} from 'express';
 
 @Controller('word')
 export class WordController {
@@ -21,7 +26,7 @@ export class WordController {
 
   @Get('list')
   @HttpCode(HttpStatus.OK)
-  async getAll(@Request() _req: Express.Request, @Response() res: Express.Response) {
+  async getAll(@Req() _req: Request, @Res() res: Response) {
     const data = await this.wordService.getAll();
 
     res.json(data);
@@ -56,9 +61,10 @@ export class WordController {
   }
 
   @Patch(':id')
-  // TODO patch
-  update(@Param('id') id: string, @Body() body: any) {
-    return this.wordService.update(id, body);
+  @ApiResponse({ status: 200, description: 'success'})
+  async update(@Param('id') id: string, @Body() body: UpdateWordDto, @Res() res: Response) {
+      await this.wordService.update(id, body);
+      res.status(HttpStatus.OK).json();
   }
 
   @Delete(':id')
