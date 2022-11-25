@@ -40,24 +40,11 @@ export class WordController {
   }
 
   @Post()
-  create(@Body() createWordsDto: CreateWordDto) {
-    return this.wordService.create(createWordsDto);
+  @ApiResponse({ status: 200, description: 'success'})
+  async create(@Body() createWordsDto: CreateWordDto, @Res() res: Response) {
+    await this.wordService.create(createWordsDto);
 
-    // console.info('addWord body', createWordsDto, word, answer);
-
-    // if (!word || !answer) {
-    //   return res.status(HttpStatus.NOT_ACCEPTABLE).json({
-    //     success: false,
-    //     message: 'add failed'
-    //   })
-    // }
-
-    // // TODO add to DB
-
-    // res.status(HttpStatus.CREATED).json({
-    //   success: true,
-    //   message: 'add success'
-    // })
+    res.status(HttpStatus.OK).json();
   }
 
   @Patch(':id')
