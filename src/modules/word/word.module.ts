@@ -15,6 +15,7 @@ import { WordService } from './word.service';
     ])
   ],
   controllers: [WordController],
-  providers: [WordService]
+  providers: [WordService],
+  exports: [WordService]
 })
 export class WordModule {}

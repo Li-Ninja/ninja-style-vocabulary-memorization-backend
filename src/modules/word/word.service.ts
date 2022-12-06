@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as dayjs from 'dayjs';
 import { Word, WordDocument } from './word.schema';
 import { CreateWordDto } from './dto/create-word.dto';
 import { UpdateWordDto } from './dto/update-word.dto';
@@ -12,8 +13,8 @@ export class WordService {
     @InjectModel(Word.name) private wordModel: Model<WordDocument>,
   ) {}
 
-  getAll() {
-    return this.wordModel.find();
+  async getAll() {
+    return await this.wordModel.find();
   }
 
   getById(id: string) {
@@ -21,7 +22,7 @@ export class WordService {
   }
 
   async create(word: CreateWordDto) {
-    const newWord = await this.wordModel.create({
+    const data: Word = {
       text: word,
       reviewCount: 0,
       tags: [],
@@ -29,18 +30,19 @@ export class WordService {
       nativeLanguage: LanguageEnum.TraditionalChinese,
       learnLanguage: LanguageEnum.Japanese,
       isClosed: false,
-      createAt: Date.now(),
-      reviewAt: Date.now(),
-      updateAt: Date.now()
-    });
+      isFavorite: false,
+      createAt: dayjs(),
+      reviewAt: dayjs(),
+      updateAt: dayjs()
+    };
 
-    return newWord.save();
+    return await (await this.wordModel.create(data)).save();
   }
 
   update(id: string, updateWordDto: UpdateWordDto) {
     const updatedData = {
       text: updateWordDto,
-      updateAt: Date.now()
+      updateAt: dayjs()
     }
 
     return this.wordModel.findByIdAndUpdate(id, updatedData, { new: true });
