@@ -4,8 +4,8 @@ import {
   SchemaFactory
 } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Dayjs } from 'dayjs';
 import { ApiProperty } from '@nestjs/swagger';
-
 
 export type WordDocument = HydratedDocument<Word>;
 
@@ -63,6 +63,14 @@ export class Word {
   })
   isClosed: boolean;
 
+  @Prop({type: Boolean, required: true })
+  @ApiProperty({
+    example: false,
+    format: 'boolean',
+    required: true
+  })
+  isFavorite: boolean;
+
 
   @Prop({type: Date, required: true })
   @ApiProperty({
@@ -70,7 +78,7 @@ export class Word {
     format: 'Date',
     required: true
   })
-  createAt: Date;
+  createAt: Dayjs;
 
   @Prop({type: Date, required: true })
   @ApiProperty({
@@ -78,7 +86,7 @@ export class Word {
     format: 'Date',
     required: true
   })
-  reviewAt: Date;
+  reviewAt: Dayjs;
 
   @Prop({type: Date, required: true })
   @ApiProperty({
@@ -86,7 +94,7 @@ export class Word {
     format: 'Date',
     required: true
   })
-  updateAt: Date;
+  updateAt: Dayjs;
 }
 
 export const WordSchema = SchemaFactory.createForClass(Word);
