@@ -1,4 +1,4 @@
 interface ReviewLog {
-  wordId: Schema.Types.ObjectId;
+  word_Id: Schema.Types.ObjectId;
   isCorrect: boolean;
 }

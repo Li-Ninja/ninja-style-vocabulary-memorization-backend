@@ -12,13 +12,13 @@ export type ReviewDocument = HydratedDocument<Review>;
 
 @Schema()
 export class Review {
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: Word.name, required: true }] })
+  @Prop({type: mongoose.Schema.Types.ObjectId, ref: Word.name, required: true })
   @ApiProperty({
     example: 0,
     format: 'string',
     required: true
   })
-  wordId: ReviewLog['wordId'];
+  word_Id: ReviewLog['word_Id'];
 
 
   @Prop({type: Boolean, required: true })

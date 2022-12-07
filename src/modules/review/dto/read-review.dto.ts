@@ -14,7 +14,7 @@ export class ReadReviewDto {
     format: 'string',
     required: true
   })
-  readonly id: ReviewDocument['wordId'];
+  readonly id: ReviewDocument['word_Id'];
 
   @IsNotEmpty()
   @IsString()
