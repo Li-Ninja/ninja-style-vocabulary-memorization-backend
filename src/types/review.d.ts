@@ -1,4 +1,6 @@
-interface ReviewLog {
-  word_Id: Schema.Types.ObjectId;
+import { Types } from 'mongoose';
+
+export interface ReviewLog {
+  word_id: Types.ObjectId;
   isCorrect: boolean;
 }

@@ -33,7 +33,7 @@ export class ReviewService {
 
   async create(reviewLogs: CreateReviewDto[]) {
     const data: Review[] = reviewLogs.map(reviewLog => ({
-      word_Id: reviewLog.id,
+      word_id: reviewLog.id,
       isCorrect: reviewLog.isCorrect,
       createAt: dayjs()
     }));

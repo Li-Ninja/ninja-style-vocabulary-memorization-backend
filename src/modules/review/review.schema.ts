@@ -3,22 +3,23 @@ import {
   Schema,
   SchemaFactory
 } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Dayjs } from 'dayjs';
 import { ApiProperty } from '@nestjs/swagger';
 import { Word } from 'src/modules/word/word.schema';
+import { ReviewLog } from 'src/types/review';
 
 export type ReviewDocument = HydratedDocument<Review>;
 
 @Schema()
 export class Review {
-  @Prop({type: mongoose.Schema.Types.ObjectId, ref: Word.name, required: true })
+  @Prop({type: Types.ObjectId, ref: Word.name, required: true })
   @ApiProperty({
     example: 0,
     format: 'string',
     required: true
   })
-  word_Id: ReviewLog['word_Id'];
+  word_id: ReviewLog['word_id'];
 
 
   @Prop({type: Boolean, required: true })
