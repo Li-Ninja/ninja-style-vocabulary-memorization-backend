@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as dayjs from 'dayjs';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReadReviewDto } from './dto/read-review.dto';
@@ -33,7 +33,7 @@ export class ReviewService {
 
   async create(reviewLogs: CreateReviewDto[]) {
     const data: Review[] = reviewLogs.map(reviewLog => ({
-      word_id: reviewLog.id,
+      word_id: new Types.ObjectId(reviewLog.id),
       isCorrect: reviewLog.isCorrect,
       createAt: dayjs()
     }));
