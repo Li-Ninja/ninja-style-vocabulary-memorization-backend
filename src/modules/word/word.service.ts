@@ -24,7 +24,6 @@ export class WordService {
   async create(word: CreateWordDto) {
     const data: Word = {
       text: word,
-      reviewCount: 0,
       tags: [],
       // TODO data from frontend
       nativeLanguage: LanguageEnum.TraditionalChinese,

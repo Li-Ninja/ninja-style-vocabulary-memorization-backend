@@ -11,14 +11,6 @@ export type WordDocument = HydratedDocument<Word>;
 
 @Schema()
 export class Word {
-  @Prop({ type: Number, required: true })
-  @ApiProperty({
-    example: 0,
-    format: 'number',
-    required: true
-  })
-  reviewCount: number;
-
   @Prop({ type: Array, required: true })
   @ApiProperty({
     example: ['life', 'restaurant'],
