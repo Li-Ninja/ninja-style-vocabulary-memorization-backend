@@ -4,7 +4,7 @@ import {
   SchemaFactory
 } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { Dayjs } from 'dayjs';
+import * as dayjs from 'dayjs';
 import { ApiProperty } from '@nestjs/swagger';
 import { Word } from 'src/modules/word/word.schema';
 import { ReviewLog } from 'src/types/review';
@@ -36,7 +36,31 @@ export class Review {
     format: 'Date',
     required: true
   })
-  createAt: Dayjs;
+  createAt: dayjs.Dayjs;
+
+  @Prop({
+    type: {
+      ratio: Number,
+      minutes: Number,
+      count: Number,
+      initialReviewAt: Date,
+      nextReviewAt: Date
+    },
+    _id: false,
+    required: true
+  })
+  @ApiProperty({
+    example: {
+      ratio: 5,
+      minutes: 10,
+      count: 1,
+      initialReviewAt: dayjs(),
+      nextReviewAt: dayjs()
+    } as ReviewLog['reviewInfo'],
+    format: 'Object',
+    required: true
+  })
+  reviewInfo: ReviewLog['reviewInfo'];
 }
 
 export const ReviewSchema = SchemaFactory.createForClass(Review);
