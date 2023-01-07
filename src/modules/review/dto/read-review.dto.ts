@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsObject,
   IsString,
   IsNotEmpty
 } from 'class-validator';
+import * as dayjs from 'dayjs';
 import { WordDocument } from '../../word/word.schema';
 import { ReviewDocument } from '../review.schema';
 
@@ -51,4 +53,19 @@ export class ReadReviewDto {
     required: true
   })
   readonly answer: WordDocument['text']['answer'];
+
+  @IsNotEmpty()
+  @IsObject()
+  @ApiProperty({
+    example: {
+      ratio: 5,
+      minutes: 10,
+      count: 1,
+      initialReviewAt: dayjs(),
+      nextReviewAt: dayjs()
+    } as ReviewDocument['reviewInfo'],
+    format: 'Object',
+    required: true
+  })
+  readonly reviewInfo: ReviewDocument['reviewInfo'];
 }
