@@ -89,9 +89,9 @@ export class ReviewService {
     return await this.reviewModel.find();
   }
 
-  async create(reviewLogs: CreateReviewDto[]) {
+  async create(reviewLogs: CreateReviewDto[], isInitial = false) {
     const data: Review[] = reviewLogs.map(reviewLog => ({
-      word_id: new Types.ObjectId(reviewLog.id),
+      word_id: new Types.ObjectId(reviewLog.word_id),
       isCorrect: reviewLog.isCorrect,
       createAt: dayjs(),
       reviewInfo: {
@@ -101,14 +101,18 @@ export class ReviewService {
         initialReviewAt: reviewLog.reviewInfo.initialReviewAt,
         // Geometric progression
         nextReviewAt:
-          dayjs(reviewLog.reviewInfo.initialReviewAt)
-          .add(
-            new Decimal(reviewLog.reviewInfo.minutes)
-              .mul(new Decimal(reviewLog.reviewInfo.ratio)
-              .pow(reviewLog.reviewInfo.count))
-              .toNumber(),
-            'minutes'
-          )
+          isInitial
+          ?
+            reviewLog.reviewInfo.initialReviewAt
+          :
+            dayjs(reviewLog.reviewInfo.initialReviewAt)
+            .add(
+              new Decimal(reviewLog.reviewInfo.minutes)
+                .mul(new Decimal(reviewLog.reviewInfo.ratio)
+                .pow(reviewLog.reviewInfo.count))
+                .toNumber(),
+              'minutes'
+            )
       }
     }));
 

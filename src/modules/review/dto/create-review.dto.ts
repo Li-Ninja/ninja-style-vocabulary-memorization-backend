@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsObject,
   IsString,
   IsNotEmpty
@@ -15,10 +16,10 @@ export class CreateReviewDto {
     format: 'string',
     required: true
   })
-  readonly id: ReviewDocument['word_id'];
+  readonly word_id: ReviewDocument['word_id'];
 
   @IsNotEmpty()
-  @IsString()
+  @IsBoolean()
   @ApiProperty({
     example: 'true',
     format: 'boolean',

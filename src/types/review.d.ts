@@ -5,7 +5,7 @@ import { WordDocument } from 'src/modules/word/word.schema';
 
 export interface ReviewLog {
   word_id: Types.ObjectId;
-  isCorrect: boolean;
+  isCorrect: boolean | null;
   reviewInfo: {
     ratio: number;
     minutes: number;
