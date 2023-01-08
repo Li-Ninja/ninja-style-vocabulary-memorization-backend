@@ -25,6 +25,11 @@ export class ReviewService {
           }
         }
       })
+      .project({
+        word_id: '$_id',
+        _id: 0,
+        reviewList: 1
+      })
       .addFields({
         review: {
           '$arrayElemAt': [
@@ -44,7 +49,7 @@ export class ReviewService {
       })
       .lookup({
         from: 'words',
-        localField: '_id',
+        localField: 'word_id',
         foreignField:'_id',
         as: 'wordList',
         pipeline: [
@@ -73,10 +78,8 @@ export class ReviewService {
         'review.nextReviewAt': 'asc'
       })
 
-      // return logList;
-
     return logList.filter(item => !item.word.isClosed).map(item => ({
-      id: item._id,
+      word_id: item.word_id,
       isFavorite: item.word.isFavorite,
       type: item.word.text.type,
       question: item.word.text.question,

@@ -16,10 +16,7 @@ export interface ReviewLog {
 }
 
 export interface MongoReviewGet {
-  _id: ReviewDocument['word_id'];
-  // review: {
-  //   reviewInfo: ReviewDocument['reviewInfo'];
-  // }
+  word_id: ReviewDocument['word_id'];
   review: Pick<ReviewDocument, 'reviewInfo'>;
   word: Pick<WordDocument, 'text' | 'isClosed' | 'isFavorite'>;
 }
