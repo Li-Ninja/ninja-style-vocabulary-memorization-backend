@@ -14,7 +14,9 @@ export class WordService {
   ) {}
 
   async getAll() {
-    return await this.wordModel.find();
+    return await this.wordModel.aggregate().sort({
+        'updateAt': 'desc'
+      });
   }
 
   getById(id: string) {
