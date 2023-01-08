@@ -21,9 +21,9 @@ export class WordService {
     return this.wordModel.findById(id);
   }
 
-  async create(word: CreateWordDto) {
-    const data: Word = {
-      text: word,
+  async create(word: CreateWordDto[]) {
+    const data: Word[] = word.map(item => ({
+      text: item,
       tags: [],
       // TODO data from frontend
       nativeLanguage: LanguageEnum.TraditionalChinese,
@@ -33,9 +33,9 @@ export class WordService {
       createAt: dayjs(),
       reviewAt: dayjs(),
       updateAt: dayjs()
-    };
+    }));
 
-    return await (await this.wordModel.create(data)).save();
+    return await this.wordModel.insertMany(data);
   }
 
   update(id: string, updateWordDto: UpdateWordDto) {
