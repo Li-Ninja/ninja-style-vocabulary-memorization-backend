@@ -8,7 +8,7 @@ import * as dayjs from 'dayjs';
 import { WordDocument } from '../../word/word.schema';
 import { ReviewDocument } from '../review.schema';
 
-export class ReadReviewDto {
+export class ReadReviewWordDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({

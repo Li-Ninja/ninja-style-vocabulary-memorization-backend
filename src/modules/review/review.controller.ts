@@ -18,11 +18,11 @@ export class ReviewController {
     private readonly reviewService: ReviewService,
   ) {}
 
-  @Get()
+  @Get('wordList')
   @ApiResponse({ status: 200, description: 'success'})
   @HttpCode(HttpStatus.OK)
   getList() {
-    return this.reviewService.getAll();
+    return this.reviewService.getWordList();
   }
 
   @Get('logList')
@@ -32,7 +32,7 @@ export class ReviewController {
     return this.reviewService.getLogList();
   }
 
-  @Post()
+  @Post('wordList')
   @ApiResponse({ status: 200, description: 'success'})
   async create(@Body() createReviewLogs: CreateReviewDto[], @Res() res: Response) {
     await this.reviewService.create(createReviewLogs);
