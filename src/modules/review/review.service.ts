@@ -15,7 +15,7 @@ export class ReviewService {
   ) {}
 
   async getWordList() {
-    const logList: MongoReviewGetAll = await this.reviewModel.aggregate()
+    const wordList: MongoReviewGetAll = await this.reviewModel.aggregate()
       .group({
         _id: '$word_id',
         reviewList: {
@@ -78,7 +78,7 @@ export class ReviewService {
         'review.nextReviewAt': 'asc'
       });
 
-    return logList.filter(item => item.word && !item.word.isClosed).map(item => ({
+    return wordList.filter(item => item.word && !item.word.isClosed).map(item => ({
       word_id: item.word_id,
       isFavorite: item.word.isFavorite,
       type: item.word.text.type,
@@ -89,7 +89,45 @@ export class ReviewService {
   }
 
   async getLogList() {
-    return await this.reviewModel.find();
+    const logList: MongoReviewGetAll = await this.reviewModel.aggregate()
+    .lookup({
+      from: 'words',
+      localField: 'word_id',
+      foreignField:'_id',
+      as: 'wordList',
+      pipeline: [
+        {
+          $project: {
+            _id: 0,
+            text: 1
+          }
+        }
+      ]
+    })
+    .addFields({
+      word: {
+        '$arrayElemAt': [
+          '$wordList',
+          { '$indexOfArray': [ '$wordList.text', { '$max': '$wordList.text' } ] }
+        ]
+      }
+    })
+    .project({
+      wordList: 0
+    })
+    .addFields({
+      type: '$word.text.type',
+      question: '$word.text.question',
+      answer: '$word.text.answer'
+    })
+    .project({
+      word: 0
+    })
+    .sort({
+      'createAt': 'desc'
+    });
+
+    return logList;
   }
 
   async create(reviewLogs: CreateReviewDto[], isInitial = false) {

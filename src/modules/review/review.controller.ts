@@ -32,7 +32,7 @@ export class ReviewController {
     return this.reviewService.getLogList();
   }
 
-  @Post()
+  @Post('wordList')
   @ApiResponse({ status: 200, description: 'success'})
   async create(@Body() createReviewLogs: CreateReviewDto[], @Res() res: Response) {
     await this.reviewService.create(createReviewLogs);

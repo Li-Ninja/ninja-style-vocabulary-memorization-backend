@@ -1,11 +1,12 @@
-import { Types } from 'mongoose';
 import { Dayjs } from 'dayjs';
 import { ReviewDocument } from 'src/modules/review/review.schema';
 import { WordDocument } from 'src/modules/word/word.schema';
+import { WordText }from './word';
 
-export interface ReviewLog {
-  word_id: Types.ObjectId;
+export interface Review {
+  word_id: WordDocument['_id'];
   isCorrect: boolean | null;
+  createAt: Dayjs;
   reviewInfo: {
     ratio: number;
     minutes: number;
@@ -13,6 +14,12 @@ export interface ReviewLog {
     initialReviewAt: Dayjs;
     nextReviewAt: Dayjs;
   }
+}
+
+export interface ReviewLog extends Review {
+  type: WordText['type'];
+  question: WordText['question'];
+  answer: WordText['answer'];
 }
 
 export interface MongoReviewGet {

@@ -7,7 +7,7 @@ import { HydratedDocument, Types } from 'mongoose';
 import * as dayjs from 'dayjs';
 import { ApiProperty } from '@nestjs/swagger';
 import { Word } from 'src/modules/word/word.schema';
-import { ReviewLog } from 'src/types/review';
+import { Review as IReview } from 'src/types/review';
 
 export type ReviewDocument = HydratedDocument<Review>;
 
@@ -19,7 +19,7 @@ export class Review {
     format: 'string',
     required: true
   })
-  word_id: ReviewLog['word_id'];
+  word_id: IReview['word_id'];
 
 
   @Prop({type: Boolean || null, required: false })
@@ -28,7 +28,7 @@ export class Review {
     format: 'boolean',
     required: true
   })
-  isCorrect: ReviewLog['isCorrect'];
+  isCorrect: IReview['isCorrect'];
 
   @Prop({type: Date, required: true })
   @ApiProperty({
@@ -56,11 +56,11 @@ export class Review {
       count: 1,
       initialReviewAt: dayjs(),
       nextReviewAt: dayjs()
-    } as ReviewLog['reviewInfo'],
+    } as IReview['reviewInfo'],
     format: 'Object',
     required: true
   })
-  reviewInfo: ReviewLog['reviewInfo'];
+  reviewInfo: IReview['reviewInfo'];
 }
 
 export const ReviewSchema = SchemaFactory.createForClass(Review);
