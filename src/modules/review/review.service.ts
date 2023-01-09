@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose';
 import * as dayjs from 'dayjs';
 import Decimal from 'decimal.js';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { ReadReviewDto } from './dto/read-review.dto';
+import { ReadReviewWordDto } from './dto/read-reviewWord.dto';
 import { Review, ReviewDocument } from './review.schema';
 import { MongoReviewGetAll } from 'src/types/review';
 
@@ -14,7 +14,7 @@ export class ReviewService {
     @InjectModel(Review.name) private readonly reviewModel: Model<ReviewDocument>
   ) {}
 
-  async getAll() {
+  async getWordList() {
     const logList: MongoReviewGetAll = await this.reviewModel.aggregate()
       .group({
         _id: '$word_id',
@@ -85,7 +85,7 @@ export class ReviewService {
       question: item.word.text.question,
       answer: item.word.text.answer,
       reviewInfo: item.review.reviewInfo
-    })) as ReadReviewDto[];
+    })) as ReadReviewWordDto[];
   }
 
   async getLogList() {

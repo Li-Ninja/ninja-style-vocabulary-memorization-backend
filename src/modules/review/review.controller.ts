@@ -18,11 +18,11 @@ export class ReviewController {
     private readonly reviewService: ReviewService,
   ) {}
 
-  @Get()
+  @Get('wordList')
   @ApiResponse({ status: 200, description: 'success'})
   @HttpCode(HttpStatus.OK)
   getList() {
-    return this.reviewService.getAll();
+    return this.reviewService.getWordList();
   }
 
   @Get('logList')
