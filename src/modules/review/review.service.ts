@@ -76,9 +76,9 @@ export class ReviewService {
       })
       .sort({
         'review.nextReviewAt': 'asc'
-      })
+      });
 
-    return logList.filter(item => !item.word.isClosed).map(item => ({
+    return logList.filter(item => item.word && !item.word.isClosed).map(item => ({
       word_id: item.word_id,
       isFavorite: item.word.isFavorite,
       type: item.word.text.type,
