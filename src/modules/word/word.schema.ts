@@ -78,14 +78,6 @@ export class Word {
     format: 'Date',
     required: true
   })
-  reviewAt: Dayjs;
-
-  @Prop({type: Date, required: true })
-  @ApiProperty({
-    example: '2022-07-18T16:00:00.000+00:00',
-    format: 'Date',
-    required: true
-  })
   updateAt: Dayjs;
 }
 

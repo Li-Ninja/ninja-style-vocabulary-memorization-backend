@@ -41,8 +41,8 @@ export class WordController {
 
   @Post()
   @ApiResponse({ status: 200, description: 'success'})
-  async create(@Body() createWordsDto: CreateWordDto, @Res() res: Response) {
-    await this.wordService.create(createWordsDto);
+  async create(@Body() createWords: CreateWordDto[], @Res() res: Response) {
+    await this.wordService.create(createWords);
 
     res.status(HttpStatus.OK).json();
   }

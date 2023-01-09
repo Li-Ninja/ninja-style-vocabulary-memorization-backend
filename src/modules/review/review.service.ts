@@ -25,6 +25,11 @@ export class ReviewService {
           }
         }
       })
+      .project({
+        word_id: '$_id',
+        _id: 0,
+        reviewList: 1
+      })
       .addFields({
         review: {
           '$arrayElemAt': [
@@ -44,7 +49,7 @@ export class ReviewService {
       })
       .lookup({
         from: 'words',
-        localField: '_id',
+        localField: 'word_id',
         foreignField:'_id',
         as: 'wordList',
         pipeline: [
@@ -71,12 +76,10 @@ export class ReviewService {
       })
       .sort({
         'review.nextReviewAt': 'asc'
-      })
+      });
 
-      // return logList;
-
-    return logList.filter(item => !item.word.isClosed).map(item => ({
-      id: item._id,
+    return logList.filter(item => item.word && !item.word.isClosed).map(item => ({
+      word_id: item.word_id,
       isFavorite: item.word.isFavorite,
       type: item.word.text.type,
       question: item.word.text.question,
@@ -89,9 +92,9 @@ export class ReviewService {
     return await this.reviewModel.find();
   }
 
-  async create(reviewLogs: CreateReviewDto[]) {
+  async create(reviewLogs: CreateReviewDto[], isInitial = false) {
     const data: Review[] = reviewLogs.map(reviewLog => ({
-      word_id: new Types.ObjectId(reviewLog.id),
+      word_id: new Types.ObjectId(reviewLog.word_id),
       isCorrect: reviewLog.isCorrect,
       createAt: dayjs(),
       reviewInfo: {
@@ -101,14 +104,18 @@ export class ReviewService {
         initialReviewAt: reviewLog.reviewInfo.initialReviewAt,
         // Geometric progression
         nextReviewAt:
-          dayjs(reviewLog.reviewInfo.initialReviewAt)
-          .add(
-            new Decimal(reviewLog.reviewInfo.minutes)
-              .mul(new Decimal(reviewLog.reviewInfo.ratio)
-              .pow(reviewLog.reviewInfo.count))
-              .toNumber(),
-            'minutes'
-          )
+          isInitial
+          ?
+            reviewLog.reviewInfo.initialReviewAt
+          :
+            dayjs(reviewLog.reviewInfo.initialReviewAt)
+            .add(
+              new Decimal(reviewLog.reviewInfo.minutes)
+                .mul(new Decimal(reviewLog.reviewInfo.ratio)
+                .pow(reviewLog.reviewInfo.count))
+                .toNumber(),
+              'minutes'
+            )
       }
     }));
 

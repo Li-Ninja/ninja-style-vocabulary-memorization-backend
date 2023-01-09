@@ -22,7 +22,7 @@ export class Review {
   word_id: ReviewLog['word_id'];
 
 
-  @Prop({type: Boolean, required: true })
+  @Prop({type: Boolean || null, required: false })
   @ApiProperty({
     example: false,
     format: 'boolean',
