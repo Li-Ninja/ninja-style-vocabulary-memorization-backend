@@ -6,7 +6,7 @@ import Decimal from 'decimal.js';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReadReviewWordDto } from './dto/read-reviewWord.dto';
 import { Review, ReviewDocument } from './review.schema';
-import { MongoReviewGetAll } from 'src/types/review';
+import { MongoReviewGet } from 'src/types/review';
 
 @Injectable()
 export class ReviewService {
@@ -15,38 +15,72 @@ export class ReviewService {
   ) {}
 
   async getWordList() {
-    const wordList: MongoReviewGetAll = await this.reviewModel.aggregate()
+    const now = dayjs().toDate();
+
+    return await this.reviewModel.aggregate()
+      .match({
+        'reviewInfo.nextReviewAt': {
+          $lte: now
+        }
+      })
+      .sort({
+        'word_id': 1,
+        'reviewInfo.nextReviewAt': -1
+      })
       .group({
         _id: '$word_id',
-        reviewList: {
-          $push: {
-            nextReviewAt: '$reviewInfo.nextReviewAt',
-            reviewInfo: '$reviewInfo'
+        'review': {
+          $first: '$$ROOT'
+        }
+      })
+      .lookup({
+        from: 'words',
+        let: {
+          'wordId': '$_id'
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$_id', '$$wordId']
+              },
+              isClosed: {
+                $ne: true
+              }
+            }
+          },
+          {
+            $addFields: {
+              type: '$text.type',
+              question: '$text.question',
+              answer: '$text.answer',
+              isClosed: '$isClosed',
+              isFavorite: '$isFavorite'
+            }
           }
-        }
-      })
-      .project({
-        word_id: '$_id',
-        _id: 0,
-        reviewList: 1
-      })
-      .addFields({
-        review: {
-          '$arrayElemAt': [
-            '$reviewList',
-            { '$indexOfArray': [ '$reviewList.nextReviewAt', { '$max': '$reviewList.nextReviewAt' } ] }
-          ]
-        }
-      })
-      .project({
-        reviewList: 0,
-        'review.nextReviewAt': 0
+        ],
+        as: 'words'
       })
       .match({
-        'review.reviewInfo.nextReviewAt': {
-            $lte: new Date(dayjs().valueOf())
+        'words': {
+          $ne: []
         }
       })
+      .unwind('$words')
+      .project({
+        _id: 0,
+        word_id: '$_id',
+        reviewInfo: '$review.reviewInfo',
+        type: '$words.type',
+        question: '$words.question',
+        answer: '$words.answer',
+        isFavorite: '$words.isFavorite'
+      })
+      .exec() as ReadReviewWordDto[];
+  }
+
+  async getLogList() {
+    return await this.reviewModel.aggregate()
       .lookup({
         from: 'words',
         localField: 'word_id',
@@ -56,9 +90,7 @@ export class ReviewService {
           {
             $project: {
               _id: 0,
-              text: 1,
-              isClosed: 1,
-              isFavorite: 1
+              text: 1
             }
           }
         ]
@@ -74,60 +106,18 @@ export class ReviewService {
       .project({
         wordList: 0
       })
+      .addFields({
+        type: '$word.text.type',
+        question: '$word.text.question',
+        answer: '$word.text.answer'
+      })
+      .project({
+        word: 0
+      })
       .sort({
-        'review.nextReviewAt': 'asc'
-      });
-
-    return wordList.filter(item => item.word && !item.word.isClosed).map(item => ({
-      word_id: item.word_id,
-      isFavorite: item.word.isFavorite,
-      type: item.word.text.type,
-      question: item.word.text.question,
-      answer: item.word.text.answer,
-      reviewInfo: item.review.reviewInfo
-    })) as ReadReviewWordDto[];
-  }
-
-  async getLogList() {
-    const logList: MongoReviewGetAll = await this.reviewModel.aggregate()
-    .lookup({
-      from: 'words',
-      localField: 'word_id',
-      foreignField:'_id',
-      as: 'wordList',
-      pipeline: [
-        {
-          $project: {
-            _id: 0,
-            text: 1
-          }
-        }
-      ]
-    })
-    .addFields({
-      word: {
-        '$arrayElemAt': [
-          '$wordList',
-          { '$indexOfArray': [ '$wordList.text', { '$max': '$wordList.text' } ] }
-        ]
-      }
-    })
-    .project({
-      wordList: 0
-    })
-    .addFields({
-      type: '$word.text.type',
-      question: '$word.text.question',
-      answer: '$word.text.answer'
-    })
-    .project({
-      word: 0
-    })
-    .sort({
-      'createAt': 'desc'
-    });
-
-    return logList;
+        'createAt': 'desc'
+      })
+      .exec() as MongoReviewGet[];
   }
 
   async create(reviewLogs: CreateReviewDto[], isInitial = false) {

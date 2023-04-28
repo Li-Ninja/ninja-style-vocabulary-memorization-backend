@@ -27,5 +27,3 @@ export interface MongoReviewGet {
   review: Pick<ReviewDocument, 'reviewInfo'>;
   word: Pick<WordDocument, 'text' | 'isClosed' | 'isFavorite'>;
 }
-
-export type MongoReviewGetAll = MongoReviewGet[];
