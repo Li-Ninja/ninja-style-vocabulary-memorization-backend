@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   frontend:
-    image: ${FRONTEND_IMAGE_NAME}
+    image: "${FRONTEND_IMAGE_NAME}"
     ports:
       - 80:8080
     restart: always
@@ -10,7 +10,7 @@ services:
       - ./.env.fronted:/app/.env.local
 
   backend:
-    image: ${BACKEND_IMAGE_NAME}
+    image: "${BACKEND_IMAGE_NAME}"
     ports:
       - 3000:3000
     restart: always
