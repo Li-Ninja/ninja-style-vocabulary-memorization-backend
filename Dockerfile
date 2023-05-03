@@ -1,8 +1,8 @@
 FROM node:16.19.0-slim
 
 WORKDIR /app
-COPY ./dist  ./dist
-COPY ./package.json ./.env ./
+COPY ./dist/src  ./dist
+COPY ./.env ./
 
 RUN yarn install
 
