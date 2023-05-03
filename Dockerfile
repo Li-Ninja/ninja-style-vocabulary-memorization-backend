@@ -2,7 +2,7 @@ FROM node:16.19.0-slim
 
 WORKDIR /app
 COPY ./dist/src  ./dist
-COPY ./.env ./
+COPY ./package.json ./.env ./
 
 RUN yarn install
 
