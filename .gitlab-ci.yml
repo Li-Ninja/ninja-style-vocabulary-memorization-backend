@@ -61,6 +61,7 @@ deploy:
       docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
 
       export BACKEND_IMAGE_NAME=$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+      export FRONTEND_IMAGE_NAME=$(docker ps --format '{{.Image}}' | grep -E 'frontend')
 
       docker-compose down &&
       docker-compose up -d
