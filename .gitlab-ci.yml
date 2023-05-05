@@ -64,7 +64,7 @@ deploy:
       export BACKEND_IMAGE_NAME=$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG;
       export FRONTEND_IMAGE_NAME=$(docker ps --format "{{.Image}}" | grep -E "frontend");
 
-      if [ $FRONTEND_IMAGE_NAME = "" ]; then
+      if [ $FRONTEND_IMAGE_NAME = \"\" ]; then
         FRONTEND_IMAGE_NAME="registry.gitlab.com/ninja-ccc/vocabulary/vocabulary-frontend:latest";
       fi;
 
