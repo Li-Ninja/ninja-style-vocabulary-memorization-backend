@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   frontend:
-    image: registry.gitlab.com/ninja-ccc/vocabulary/vocabulary-frontend:0.0.6-0
+    image: "${FRONTEND_IMAGE_NAME}"
     ports:
       - 80:8080
     restart: always
