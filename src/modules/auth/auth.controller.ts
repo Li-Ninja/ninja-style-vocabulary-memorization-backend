@@ -8,6 +8,7 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
+import { SkipJwtAuth } from './auth.const';
 import { ReadAuthLoginDto } from './dto/read-authLogin.dto';
 
 
@@ -18,6 +19,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @SkipJwtAuth()
   @ApiResponse({ status: HttpStatus.OK, description: 'success'})
   async login(@Body() readAuthLogin: ReadAuthLoginDto, @Res() res: Response) {
     const successToken = await this.authService.validateUser(readAuthLogin);

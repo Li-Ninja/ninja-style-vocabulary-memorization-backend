@@ -25,7 +25,8 @@ export class AuthService {
     if (isValid) {
       const token = await this.jwtService.signAsync(
         {
-          id: userList[0]._id
+          id: userList[0]._id,
+          account: userList[0].account
         },
         {
           secret: process.env.JWT_SECRET,
