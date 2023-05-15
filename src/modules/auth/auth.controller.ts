@@ -10,7 +10,7 @@ import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SkipJwtAuth } from './auth.const';
 import { ReadAuthLoginDto } from './dto/read-authLogin.dto';
-
+import { ApiResponseData } from 'src/types/api';
 
 @Controller('auth')
 export class AuthController {
@@ -26,14 +26,17 @@ export class AuthController {
 
     if (successToken) {
         res.status(HttpStatus.OK).json({
-          token: successToken
-        });
+          data: {
+            token: successToken
+          }
+        } as ApiResponseData);
     } else {
       res
         .status(HttpStatus.UNAUTHORIZED)
         .json({
+          data: null,
           message: 'Invalid account or password'
-        });
+        } as ApiResponseData);
     }
   }
 }

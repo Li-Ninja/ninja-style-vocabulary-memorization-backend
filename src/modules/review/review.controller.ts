@@ -11,6 +11,7 @@ import { ApiResponse } from '@nestjs/swagger';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewService } from './review.service';
 import { Response } from 'express';
+import { ApiResponseData } from 'src/types/api';
 
 @Controller('review')
 export class ReviewController {
@@ -21,15 +22,19 @@ export class ReviewController {
   @Get('wordList')
   @ApiResponse({ status: 200, description: 'success'})
   @HttpCode(HttpStatus.OK)
-  getList() {
-    return this.reviewService.getWordList();
+  getList(): ApiResponseData {
+    const data = this.reviewService.getWordList();
+
+    return { data };
   }
 
   @Get('logList')
   @ApiResponse({ status: 200, description: 'success'})
   @HttpCode(HttpStatus.OK)
-  getLogList() {
-    return this.reviewService.getLogList();
+  getLogList(): ApiResponseData {
+    const data = this.reviewService.getLogList();
+
+    return { data };
   }
 
   @Post('wordList')
