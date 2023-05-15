@@ -22,19 +22,19 @@ export class ReviewController {
   @Get('wordList')
   @ApiResponse({ status: 200, description: 'success'})
   @HttpCode(HttpStatus.OK)
-  getList(): ApiResponseData {
-    const data = this.reviewService.getWordList();
+  async getList() {
+    const data = await this.reviewService.getWordList();
 
-    return { data };
+    return { data } as ApiResponseData;
   }
 
   @Get('logList')
   @ApiResponse({ status: 200, description: 'success'})
   @HttpCode(HttpStatus.OK)
-  getLogList(): ApiResponseData {
-    const data = this.reviewService.getLogList();
+  async getLogList() {
+    const data = await this.reviewService.getLogList();
 
-    return { data };
+    return { data } as ApiResponseData;
   }
 
   @Post('wordList')
