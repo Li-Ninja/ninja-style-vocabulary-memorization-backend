@@ -19,6 +19,7 @@ import {
   Request,
   Response
 } from 'express';
+import { ApiResponseData } from 'src/types/api';
 
 @Controller('word')
 export class WordController {
@@ -29,14 +30,16 @@ export class WordController {
   async getAll(@Req() _req: Request, @Res() res: Response) {
     const data = await this.wordService.getAll();
 
-    res.json(data);
+    res.json({
+      data
+    } as ApiResponseData);
   }
 
   @Get(':id')
   async getById(@Param('id') id: string) {
     const data = await this.wordService.getById(id);
 
-    return data;
+    return { data } as ApiResponseData;
   }
 
   @Post()
