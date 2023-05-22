@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ReviewModule } from '../review/review.module';
 import { SocketGateway } from './socket.gateway';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
-    ReviewModule
+    AuthModule
   ],
   providers: [SocketGateway]
 })

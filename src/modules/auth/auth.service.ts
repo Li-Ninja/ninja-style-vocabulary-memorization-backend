@@ -1,9 +1,12 @@
 import * as bcrypt from 'bcrypt';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ReadAuthLoginDto } from './dto/read-authLogin.dto';
 import { UserService } from 'src/modules/user/user.service';
-
+import { CustomRequest } from 'src/types/api.d';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +14,22 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
+
+  async validateToken(headers: CustomRequest['headers']): Promise<{ _id: string; account: string }> {
+    const token = this.extractTokenFromHeader(headers);
+
+    if (!token) {
+      throw new ForbiddenException();
+    }
+    try {
+      const user: { _id: string; account: string } = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET
+      });
+      return user;
+    } catch {
+      throw new ForbiddenException();
+    }
+  }
 
   async validateUser(data: ReadAuthLoginDto) {
     const userList = await this.userService.getByAccount(data.account);
@@ -38,5 +57,10 @@ export class AuthService {
     } else {
       return false;
     }
+  }
+
+  private extractTokenFromHeader(headers: CustomRequest['headers']): string | undefined {
+    const [type, token] = headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }
