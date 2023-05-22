@@ -6,5 +6,6 @@ declare namespace NodeJS {
     SALT_ROUNDS: string;
     JWT_SECRET: string;
     JWT_EXPIRES_IN: string;
+    CORS_ORIGIN: string;
   }
 }
