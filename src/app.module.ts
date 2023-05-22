@@ -7,6 +7,7 @@ import { WordModule } from './modules/word/word.module';
 import { ReviewModule } from './modules/review/review.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { SocketModule } from './modules/socket/socket.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ),
     AuthModule,
     ReviewModule,
+    SocketModule,
     UserModule,
     WordModule
   ],

@@ -3,13 +3,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { version }  from '../package.json';
+import { corsOrigin } from 'src/constants/config.constant';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: process.env.IS_DEV === 'true' ? new RegExp('http://localhost'): new RegExp('ninjaccc.com')
+    origin: corsOrigin
   });
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
