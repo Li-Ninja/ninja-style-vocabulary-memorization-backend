@@ -2,11 +2,13 @@ import { Server, Socket } from 'socket.io';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
+  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer
 } from '@nestjs/websockets';
 import { corsOrigin } from 'src/constants/config.constant';
 import { AuthService } from '../auth/auth.service';
+import { ApiResponseData } from 'src/types/api';
 
 @WebSocketGateway({
   cors: {
@@ -15,6 +17,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class SocketGateway  implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
+  private connectedClients: Map<string, Socket> = new Map<string, Socket>();
 
   constructor(private authService: AuthService) {}
 
@@ -25,6 +28,7 @@ export class SocketGateway  implements OnGatewayConnection, OnGatewayDisconnect 
       const user = await this.authService.validateToken(client.handshake.headers);
       // TODO Log
       console.log('handleConnection successfully', client.id, user);
+      this.connectedClients.set(user.account, client);
     } catch {
 
       // TODO Log
@@ -37,5 +41,26 @@ export class SocketGateway  implements OnGatewayConnection, OnGatewayDisconnect 
   handleDisconnect(client: Socket) {
     // TODO handle disconnect
     console.log('handleDisconnect', client.id);
+
+    this.connectedClients.forEach((value, key) => {
+      if (value === client) {
+        this.connectedClients.delete(key);
+      }
+    });
+  }
+
+  @SubscribeMessage('wordReviewNotify')
+  async sendWordReviewNotify(count: number) {
+    // TODO only send to user who has word to review
+    this.connectedClients.forEach((connectedClient) => {
+      const res: ApiResponseData = {
+        data: {
+          hasReviewWord: true,
+          count
+        }
+      };
+
+      connectedClient.emit('wordReviewNotify', res);
+    });
   }
 }

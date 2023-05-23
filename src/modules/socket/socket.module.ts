@@ -6,6 +6,7 @@ import { AuthModule } from '../auth/auth.module';
   imports: [
     AuthModule
   ],
-  providers: [SocketGateway]
+  providers: [SocketGateway],
+  exports: [SocketGateway]
 })
 export class SocketModule {}
