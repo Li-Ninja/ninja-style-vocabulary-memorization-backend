@@ -13,7 +13,7 @@ import { CronModule } from './modules/cron/cron.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.local', '.env']
+      envFilePath: ['.env']
     }),
     MongooseModule.forRoot(
       `mongodb+srv://${process.env.MONGODB_ACCOUNT}:${process.env.MONGODB_PASSWORD}@mycluster.xr8zjdk.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority`
