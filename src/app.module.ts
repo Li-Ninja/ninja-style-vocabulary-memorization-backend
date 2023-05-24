@@ -7,6 +7,8 @@ import { WordModule } from './modules/word/word.module';
 import { ReviewModule } from './modules/review/review.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { SocketModule } from './modules/socket/socket.module';
+import { CronModule } from './modules/cron/cron.module';
 
 @Module({
   imports: [
@@ -17,7 +19,9 @@ import { AuthModule } from './modules/auth/auth.module';
       `mongodb+srv://${process.env.MONGODB_ACCOUNT}:${process.env.MONGODB_PASSWORD}@mycluster.xr8zjdk.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority`
     ),
     AuthModule,
+    CronModule,
     ReviewModule,
+    SocketModule,
     UserModule,
     WordModule
   ],
