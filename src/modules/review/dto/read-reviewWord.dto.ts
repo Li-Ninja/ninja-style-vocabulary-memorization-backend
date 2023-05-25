@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsNotEmpty,
   IsObject,
   IsString,
-  IsNotEmpty
 } from 'class-validator';
 import * as dayjs from 'dayjs';
 import { WordDocument } from '../../word/word.schema';
@@ -14,7 +14,7 @@ export class ReadReviewWordDto {
   @ApiProperty({
     example: '0',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly word_id: ReviewDocument['word_id'];
 
@@ -23,7 +23,7 @@ export class ReadReviewWordDto {
   @ApiProperty({
     example: true,
     format: 'boolean',
-    required: true
+    required: true,
   })
   readonly isFavorite: WordDocument['isFavorite'];
 
@@ -32,7 +32,7 @@ export class ReadReviewWordDto {
   @ApiProperty({
     example: 'card',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly type: WordDocument['text']['type'];
 
@@ -41,7 +41,7 @@ export class ReadReviewWordDto {
   @ApiProperty({
     example: '火曜日',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly question: WordDocument['text']['question'];
 
@@ -50,7 +50,7 @@ export class ReadReviewWordDto {
   @ApiProperty({
     example: '星期二',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly answer: WordDocument['text']['answer'];
 
@@ -62,10 +62,10 @@ export class ReadReviewWordDto {
       minutes: 10,
       count: 1,
       initialReviewAt: dayjs(),
-      nextReviewAt: dayjs()
+      nextReviewAt: dayjs(),
     } as ReviewDocument['reviewInfo'],
     format: 'Object',
-    required: true
+    required: true,
   })
   readonly reviewInfo: ReviewDocument['reviewInfo'];
 }

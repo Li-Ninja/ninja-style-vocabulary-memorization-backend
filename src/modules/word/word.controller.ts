@@ -9,17 +9,17 @@ import {
   Patch,
   Post,
   Req,
-  Res
+  Res,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { WordService } from './word.service';
-import { CreateWordDto } from './dto/create-word.dto';
-import { UpdateWordDto } from './dto/update-word.dto';
 import {
   Request,
-  Response
+  Response,
 } from 'express';
 import { ApiResponseData } from 'src/types/api';
+import { CreateWordDto } from './dto/create-word.dto';
+import { UpdateWordDto } from './dto/update-word.dto';
+import { WordService } from './word.service';
 
 @Controller('word')
 export class WordController {
@@ -31,7 +31,7 @@ export class WordController {
     const data = await this.wordService.getAll();
 
     res.json({
-      data
+      data,
     } as ApiResponseData);
   }
 
@@ -43,7 +43,7 @@ export class WordController {
   }
 
   @Post()
-  @ApiResponse({ status: 200, description: 'success'})
+  @ApiResponse({ status: 200, description: 'success' })
   async create(@Body() createWords: CreateWordDto[], @Res() res: Response) {
     await this.wordService.create(createWords);
 
@@ -51,10 +51,10 @@ export class WordController {
   }
 
   @Patch(':id')
-  @ApiResponse({ status: 200, description: 'success'})
+  @ApiResponse({ status: 200, description: 'success' })
   async update(@Param('id') id: string, @Body() body: UpdateWordDto, @Res() res: Response) {
-      await this.wordService.update(id, body);
-      res.status(HttpStatus.OK).json();
+    await this.wordService.update(id, body);
+    res.status(HttpStatus.OK).json();
   }
 
   @Delete(':id')
@@ -62,5 +62,4 @@ export class WordController {
   remove(@Param('id') id: string) {
     return this.wordService.remove(id);
   }
-
 }

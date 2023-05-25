@@ -1,36 +1,38 @@
-import { Server, Socket } from 'socket.io';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer
+  WebSocketServer,
 } from '@nestjs/websockets';
+import {
+  Server, Socket,
+} from 'socket.io';
 import { corsOrigin } from 'src/constants/config.constant';
-import { AuthService } from '../auth/auth.service';
 import { ApiResponseData } from 'src/types/api';
+import { AuthService } from '../auth/auth.service';
 
 @WebSocketGateway({
   cors: {
-    origin: corsOrigin
-  }
+    origin: corsOrigin,
+  },
 })
-export class SocketGateway  implements OnGatewayConnection, OnGatewayDisconnect {
+export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
+
   private connectedClients: Map<string, Socket> = new Map<string, Socket>();
 
   constructor(private authService: AuthService) {}
-
 
   /** is required by OnGatewayConnection */
   async handleConnection(client: Socket) {
     try {
       const user = await this.authService.validateToken(client.handshake.headers);
+
       // TODO Log
       console.log('handleConnection successfully', client.id, user);
       this.connectedClients.set(user.account, client);
     } catch {
-
       // TODO Log
       console.log('handleConnection', client.id, 'invalid token');
       client.disconnect();
@@ -52,12 +54,12 @@ export class SocketGateway  implements OnGatewayConnection, OnGatewayDisconnect 
   @SubscribeMessage('wordReviewNotify')
   async sendWordReviewNotify(count: number) {
     // TODO only send to user who has word to review
-    this.connectedClients.forEach((connectedClient) => {
+    this.connectedClients.forEach(connectedClient => {
       const res: ApiResponseData = {
         data: {
           hasReviewWord: true,
-          count
-        }
+          count,
+        },
       };
 
       connectedClient.emit('wordReviewNotify', res);

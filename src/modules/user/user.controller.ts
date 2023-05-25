@@ -3,11 +3,11 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Res
+  Res,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { UserService } from './user.service';
 import { Response } from 'express';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
@@ -15,7 +15,7 @@ export class UserController {
 
   @Get('list')
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: HttpStatus.OK, description: 'success'})
+  @ApiResponse({ status: HttpStatus.OK, description: 'success' })
   async getAll(@Res() res: Response) {
     const data = await this.userService.getAll();
 

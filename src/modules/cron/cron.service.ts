@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import {
+  Cron, CronExpression,
+} from '@nestjs/schedule';
 import { ReviewService } from '../review/review.service';
 import { SocketGateway } from '../socket/socket.gateway';
 
@@ -7,7 +9,7 @@ import { SocketGateway } from '../socket/socket.gateway';
 export class CronService {
   constructor(
     private readonly reviewService: ReviewService,
-    private readonly socketGateway: SocketGateway
+    private readonly socketGateway: SocketGateway,
   ) {}
 
   @Cron(CronExpression.EVERY_10_MINUTES)

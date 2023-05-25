@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Word, WordSchema } from './word.schema';
-import { WordController } from './word.controller';
-import { WordService } from './word.service';
 import { ReviewModule } from 'src/modules/review/review.module';
-
+import { WordController } from './word.controller';
+import {
+  Word, WordSchema,
+} from './word.schema';
+import { WordService } from './word.service';
 
 @Module({
   imports: [
@@ -12,12 +13,12 @@ import { ReviewModule } from 'src/modules/review/review.module';
     MongooseModule.forFeature([
       {
         name: Word.name,
-        schema: WordSchema
-      }
-    ])
+        schema: WordSchema,
+      },
+    ]),
   ],
   controllers: [WordController],
   providers: [WordService],
-  exports: [WordService]
+  exports: [WordService],
 })
 export class WordModule {}

@@ -1,12 +1,10 @@
 import {
   Prop,
   Schema,
-  SchemaFactory
+  SchemaFactory,
 } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-
-export type UserDocument = HydratedDocument<User>;
+import { HydratedDocument } from 'mongoose';
 
 @Schema()
 export class User {
@@ -16,17 +14,17 @@ export class User {
     format: 'string',
     minLength: 6,
     maxLength: 20,
-    required: true
+    required: true,
   })
-  account: string;
+    account: string;
 
   @Prop({ type: String, required: true })
   @ApiProperty({
     example: 'email@gmail.com',
     format: 'string',
-    required: true
+    required: true,
   })
-  email: string;
+    email: string;
 
   @Prop({ type: String, required: true })
   @ApiProperty({
@@ -34,9 +32,10 @@ export class User {
     format: 'string',
     minLength: 6,
     maxLength: 30,
-    required: true
+    required: true,
   })
-  password: string;
+    password: string;
 }
 
+export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);

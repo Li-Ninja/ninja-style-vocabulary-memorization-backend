@@ -1,10 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsNotEmpty,
   IsString,
-  IsNotEmpty
 } from 'class-validator';
 import { WordDocument } from '../word.schema';
-
 
 export class CreateWordDto {
   @IsNotEmpty()
@@ -12,7 +11,7 @@ export class CreateWordDto {
   @ApiProperty({
     example: 'card',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly type: WordDocument['text']['type'];
 
@@ -21,7 +20,7 @@ export class CreateWordDto {
   @ApiProperty({
     example: '火曜日',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly question: WordDocument['text']['question'];
 
@@ -30,7 +29,7 @@ export class CreateWordDto {
   @ApiProperty({
     example: '星期二',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly answer: WordDocument['text']['answer'];
 }

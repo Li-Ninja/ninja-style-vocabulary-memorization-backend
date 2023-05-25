@@ -1,23 +1,25 @@
-import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-import { User, UserDocument } from './user.schema';
-import { CreateUserDto } from './dto/create-user.dto';
-import { MongoUserGet } from 'src/types/user';
 import { ReadAuthLoginDto } from 'src/modules/auth/dto/read-authLogin.dto';
+import { MongoUserGet } from 'src/types/user';
+import { CreateUserDto } from './dto/create-user.dto';
+import {
+  User, UserDocument,
+} from './user.schema';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name)
-    private readonly userModel: Model<UserDocument>
+    private readonly userModel: Model<UserDocument>,
   ) {}
 
   async getAll() {
     return await this.userModel.aggregate()
       .project({
-        password: 0
+        password: 0,
       })
       .exec() as Omit<MongoUserGet, 'password'>[];
   }
@@ -25,7 +27,7 @@ export class UserService {
   async getByAccount(account: ReadAuthLoginDto['account']) {
     return await this.userModel.aggregate()
       .match({
-        account: account
+        account,
       })
       .exec() as MongoUserGet[];
   }
@@ -36,15 +38,17 @@ export class UserService {
     if (userList.length > 0) {
       // TODO 帳號重複
 
-      return;
+      return false;
     }
 
     const data: User[] = [{
       account: user.account,
       email: user.email,
-      password: bcrypt.hashSync(user.password, parseInt(process.env.SALT_ROUNDS))
-    }]
+      password: bcrypt.hashSync(user.password, parseInt(process.env.SALT_ROUNDS, 10)),
+    }];
 
-    return await this.userModel.insertMany(data);
+    await this.userModel.insertMany(data);
+
+    return true;
   }
 }

@@ -1,12 +1,12 @@
-import * as bcrypt from 'bcrypt';
 import {
+  ForbiddenException,
   Injectable,
-  ForbiddenException
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ReadAuthLoginDto } from './dto/read-authLogin.dto';
+import * as bcrypt from 'bcrypt';
 import { UserService } from 'src/modules/user/user.service';
 import { CustomRequest } from 'src/types/api.d';
+import { ReadAuthLoginDto } from './dto/read-authLogin.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,15 +16,17 @@ export class AuthService {
   ) {}
 
   async validateToken(headers: CustomRequest['headers']): Promise<{ _id: string; account: string }> {
-    const token = this.extractTokenFromHeader(headers);
+    const token = AuthService.extractTokenFromHeader(headers);
 
     if (!token) {
       throw new ForbiddenException();
     }
+
     try {
       const user: { _id: string; account: string } = await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_SECRET
+        secret: process.env.JWT_SECRET,
       });
+
       return user;
     } catch {
       throw new ForbiddenException();
@@ -45,22 +47,23 @@ export class AuthService {
       const token = await this.jwtService.signAsync(
         {
           id: userList[0]._id,
-          account: userList[0].account
+          account: userList[0].account,
         },
         {
           secret: process.env.JWT_SECRET,
-          expiresIn: process.env.JWT_EXPIRES_IN
-        }
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        },
       );
 
       return token;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
-  private extractTokenFromHeader(headers: CustomRequest['headers']): string | undefined {
+  static extractTokenFromHeader(headers: CustomRequest['headers']): string | undefined {
     const [type, token] = headers.authorization?.split(' ') ?? [];
+
     return type === 'Bearer' ? token : undefined;
   }
 }

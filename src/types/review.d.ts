@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { ReviewDocument } from 'src/modules/review/review.schema';
 import { WordDocument } from 'src/modules/word/word.schema';
-import { WordText }from './word';
+import { WordText } from './word';
 
 export interface Review {
   word_id: WordDocument['_id'];
@@ -13,7 +13,7 @@ export interface Review {
     count: number;
     initialReviewAt: Dayjs;
     nextReviewAt: Dayjs;
-  }
+  };
 }
 
 export interface ReviewLog extends Review {

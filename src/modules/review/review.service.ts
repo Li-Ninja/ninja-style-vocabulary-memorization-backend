@@ -1,17 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
 import * as dayjs from 'dayjs';
 import Decimal from 'decimal.js';
+import {
+  Model, Types,
+} from 'mongoose';
+import { MongoReviewGet } from 'src/types/review';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReadReviewWordDto } from './dto/read-reviewWord.dto';
-import { Review, ReviewDocument } from './review.schema';
-import { MongoReviewGet } from 'src/types/review';
+import {
+  Review, ReviewDocument,
+} from './review.schema';
 
 @Injectable()
 export class ReviewService {
   constructor(
-    @InjectModel(Review.name) private readonly reviewModel: Model<ReviewDocument>
+    @InjectModel(Review.name) private readonly reviewModel: Model<ReviewDocument>,
   ) {}
 
   async getWordList() {
@@ -20,34 +24,34 @@ export class ReviewService {
     return await this.reviewModel.aggregate()
       .match({
         'reviewInfo.nextReviewAt': {
-          $lte: now
-        }
+          $lte: now,
+        },
       })
       .sort({
-        'word_id': 1,
-        'reviewInfo.nextReviewAt': -1
+        word_id: 1,
+        'reviewInfo.nextReviewAt': -1,
       })
       .group({
         _id: '$word_id',
-        'review': {
-          $first: '$$ROOT'
-        }
+        review: {
+          $first: '$$ROOT',
+        },
       })
       .lookup({
         from: 'words',
         let: {
-          'wordId': '$_id'
+          wordId: '$_id',
         },
         pipeline: [
           {
             $match: {
               $expr: {
-                $eq: ['$_id', '$$wordId']
+                $eq: ['$_id', '$$wordId'],
               },
               isClosed: {
-                $ne: true
-              }
-            }
+                $ne: true,
+              },
+            },
           },
           {
             $addFields: {
@@ -55,16 +59,16 @@ export class ReviewService {
               question: '$text.question',
               answer: '$text.answer',
               isClosed: '$isClosed',
-              isFavorite: '$isFavorite'
-            }
-          }
+              isFavorite: '$isFavorite',
+            },
+          },
         ],
-        as: 'words'
+        as: 'words',
       })
       .match({
-        'words': {
-          $ne: []
-        }
+        words: {
+          $ne: [],
+        },
       })
       .unwind('$words')
       .project({
@@ -74,7 +78,7 @@ export class ReviewService {
         type: '$words.type',
         question: '$words.question',
         answer: '$words.answer',
-        isFavorite: '$words.isFavorite'
+        isFavorite: '$words.isFavorite',
       })
       .exec() as ReadReviewWordDto[];
   }
@@ -84,38 +88,38 @@ export class ReviewService {
       .lookup({
         from: 'words',
         localField: 'word_id',
-        foreignField:'_id',
+        foreignField: '_id',
         as: 'wordList',
         pipeline: [
           {
             $project: {
               _id: 0,
-              text: 1
-            }
-          }
-        ]
+              text: 1,
+            },
+          },
+        ],
       })
       .addFields({
         word: {
-          '$arrayElemAt': [
+          $arrayElemAt: [
             '$wordList',
-            { '$indexOfArray': [ '$wordList.text', { '$max': '$wordList.text' } ] }
-          ]
-        }
+            { $indexOfArray: ['$wordList.text', { $max: '$wordList.text' }] },
+          ],
+        },
       })
       .project({
-        wordList: 0
+        wordList: 0,
       })
       .addFields({
         type: '$word.text.type',
         question: '$word.text.question',
-        answer: '$word.text.answer'
+        answer: '$word.text.answer',
       })
       .project({
-        word: 0
+        word: 0,
       })
       .sort({
-        'createAt': 'desc'
+        createAt: 'desc',
       })
       .exec() as MongoReviewGet[];
   }
@@ -133,20 +137,20 @@ export class ReviewService {
         // Geometric progression
         nextReviewAt:
           isInitial
-          ?
-            reviewLog.reviewInfo.initialReviewAt
-          :
-            dayjs(reviewLog.reviewInfo.initialReviewAt)
-            .add(
-              new Decimal(reviewLog.reviewInfo.minutes)
-                .mul(new Decimal(reviewLog.reviewInfo.ratio)
-                .pow(reviewLog.reviewInfo.count))
-                .toNumber(),
-              'minutes'
-            )
-      }
+            ? reviewLog.reviewInfo.initialReviewAt
+            : dayjs(reviewLog.reviewInfo.initialReviewAt)
+              .add(
+                new Decimal(reviewLog.reviewInfo.minutes)
+                  .mul(new Decimal(reviewLog.reviewInfo.ratio)
+                    .pow(reviewLog.reviewInfo.count))
+                  .toNumber(),
+                'minutes',
+              ),
+      },
     }));
 
-    return await this.reviewModel.insertMany(data);
+    const result = await this.reviewModel.insertMany(data);
+
+    return result;
   }
 }

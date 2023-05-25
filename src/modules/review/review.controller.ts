@@ -5,13 +5,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Res
+  Res,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { ReviewService } from './review.service';
 import { Response } from 'express';
 import { ApiResponseData } from 'src/types/api';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { ReviewService } from './review.service';
 
 @Controller('review')
 export class ReviewController {
@@ -20,7 +20,7 @@ export class ReviewController {
   ) {}
 
   @Get('wordList')
-  @ApiResponse({ status: 200, description: 'success'})
+  @ApiResponse({ status: 200, description: 'success' })
   @HttpCode(HttpStatus.OK)
   async getList() {
     const data = await this.reviewService.getWordList();
@@ -29,7 +29,7 @@ export class ReviewController {
   }
 
   @Get('logList')
-  @ApiResponse({ status: 200, description: 'success'})
+  @ApiResponse({ status: 200, description: 'success' })
   @HttpCode(HttpStatus.OK)
   async getLogList() {
     const data = await this.reviewService.getLogList();
@@ -38,7 +38,7 @@ export class ReviewController {
   }
 
   @Post('wordList')
-  @ApiResponse({ status: 200, description: 'success'})
+  @ApiResponse({ status: 200, description: 'success' })
   async create(@Body() createReviewLogs: CreateReviewDto[], @Res() res: Response) {
     await this.reviewService.create(createReviewLogs);
     res.status(HttpStatus.OK).json();

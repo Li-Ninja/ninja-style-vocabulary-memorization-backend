@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDate,
+  IsNotEmpty,
   IsObject,
   IsString,
-  IsNotEmpty
 } from 'class-validator';
 import * as dayjs from 'dayjs';
 import { WordDocument } from '../../word/word.schema';
@@ -15,7 +15,7 @@ export class ReadReviewLogDto {
   @ApiProperty({
     example: '0',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly _id: ReviewDocument['_id'];
 
@@ -24,7 +24,7 @@ export class ReadReviewLogDto {
   @ApiProperty({
     example: '0',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly word_id: ReviewDocument['word_id'];
 
@@ -33,7 +33,7 @@ export class ReadReviewLogDto {
   @ApiProperty({
     example: dayjs.Dayjs,
     format: 'Date',
-    required: true
+    required: true,
   })
   readonly createAt: ReviewDocument['createAt'];
 
@@ -42,7 +42,7 @@ export class ReadReviewLogDto {
   @ApiProperty({
     example: 'card',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly type: WordDocument['text']['type'];
 
@@ -51,7 +51,7 @@ export class ReadReviewLogDto {
   @ApiProperty({
     example: '火曜日',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly question: WordDocument['text']['question'];
 
@@ -60,7 +60,7 @@ export class ReadReviewLogDto {
   @ApiProperty({
     example: '星期二',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly answer: WordDocument['text']['answer'];
 
@@ -72,10 +72,10 @@ export class ReadReviewLogDto {
       minutes: 10,
       count: 1,
       initialReviewAt: dayjs(),
-      nextReviewAt: dayjs()
+      nextReviewAt: dayjs(),
     } as ReviewDocument['reviewInfo'],
     format: 'Object',
-    required: true
+    required: true,
   })
   readonly reviewInfo: ReviewDocument['reviewInfo'];
 }

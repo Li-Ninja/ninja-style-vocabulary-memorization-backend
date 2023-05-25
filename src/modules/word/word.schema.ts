@@ -1,13 +1,11 @@
 import {
   Prop,
   Schema,
-  SchemaFactory
+  SchemaFactory,
 } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import { Dayjs } from 'dayjs';
 import { ApiProperty } from '@nestjs/swagger';
-
-export type WordDocument = HydratedDocument<Word>;
+import { Dayjs } from 'dayjs';
+import { HydratedDocument } from 'mongoose';
 
 @Schema()
 export class Word {
@@ -15,71 +13,70 @@ export class Word {
   @ApiProperty({
     example: ['life', 'restaurant'],
     format: 'string[]',
-    required: true
+    required: true,
   })
-  tags: string[];
+    tags: string[];
 
-  @Prop({type: Number, required: true })
+  @Prop({ type: Number, required: true })
   @ApiProperty({
     example: 1,
     format: 'number',
-    required: true
+    required: true,
   })
-  nativeLanguage: number;
+    nativeLanguage: number;
 
-  @Prop({type: Number, required: true })
+  @Prop({ type: Number, required: true })
   @ApiProperty({
     example: 2,
     format: 'number',
-    required: true
+    required: true,
   })
-  learnLanguage: number;
+    learnLanguage: number;
 
-  @Prop({type: Object, required: true })
+  @Prop({ type: Object, required: true })
   @ApiProperty({
     example: {
       type: 'card',
       question: 'お茶',
-      answer: '茶'
+      answer: '茶',
     } as WordText,
     format: 'Object',
-    required: true
+    required: true,
   })
-  text: WordText;
+    text: WordText;
 
-  @Prop({type: Boolean, required: true })
+  @Prop({ type: Boolean, required: true })
   @ApiProperty({
     example: false,
     format: 'boolean',
-    required: true
+    required: true,
   })
-  isClosed: boolean;
+    isClosed: boolean;
 
-  @Prop({type: Boolean, required: true })
+  @Prop({ type: Boolean, required: true })
   @ApiProperty({
     example: false,
     format: 'boolean',
-    required: true
+    required: true,
   })
-  isFavorite: boolean;
+    isFavorite: boolean;
 
-
-  @Prop({type: Date, required: true })
+  @Prop({ type: Date, required: true })
   @ApiProperty({
     example: '2022-07-18T16:00:00.000+00:00',
     format: 'Date',
-    required: true
+    required: true,
   })
-  createAt: Dayjs;
+    createAt: Dayjs;
 
-  @Prop({type: Date, required: true })
+  @Prop({ type: Date, required: true })
   @ApiProperty({
     example: '2022-07-18T16:00:00.000+00:00',
     format: 'Date',
-    required: true
+    required: true,
   })
-  updateAt: Dayjs;
+    updateAt: Dayjs;
 }
 
+export type WordDocument = HydratedDocument<Word>;
 export const WordSchema = SchemaFactory.createForClass(Word);
-

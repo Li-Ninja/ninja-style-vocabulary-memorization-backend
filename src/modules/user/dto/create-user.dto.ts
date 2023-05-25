@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsNotEmpty,
   IsString,
-  IsNotEmpty
 } from 'class-validator';
 import { UserDocument } from '../user.schema';
 
@@ -11,7 +11,7 @@ export class CreateUserDto {
   @ApiProperty({
     example: 'account',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly account: UserDocument['account'];
 
@@ -20,7 +20,7 @@ export class CreateUserDto {
   @ApiProperty({
     example: 'email@gmail.com',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly email: UserDocument['email'];
 
@@ -29,7 +29,7 @@ export class CreateUserDto {
   @ApiProperty({
     example: 'password',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly password: UserDocument['password'];
 }

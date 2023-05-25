@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
+  IsNotEmpty,
   IsObject,
   IsString,
-  IsNotEmpty
 } from 'class-validator';
 import * as dayjs from 'dayjs';
 import { ReviewDocument } from '../review.schema';
@@ -14,7 +14,7 @@ export class CreateReviewDto {
   @ApiProperty({
     example: '0',
     format: 'string',
-    required: true
+    required: true,
   })
   readonly word_id: ReviewDocument['word_id'];
 
@@ -23,7 +23,7 @@ export class CreateReviewDto {
   @ApiProperty({
     example: 'true',
     format: 'boolean',
-    required: true
+    required: true,
   })
   readonly isCorrect: ReviewDocument['isCorrect'];
 
@@ -34,10 +34,10 @@ export class CreateReviewDto {
       ratio: 5,
       minutes: 10,
       count: 1,
-      initialReviewAt: dayjs()
+      initialReviewAt: dayjs(),
     } as Omit<ReviewDocument['reviewInfo'], 'nextReviewAt'>,
     format: 'Object',
-    required: true
+    required: true,
   })
   readonly reviewInfo: Omit<ReviewDocument['reviewInfo'], 'nextReviewAt'>;
 }
