@@ -8,8 +8,8 @@ import * as dayjs from 'dayjs';
 import {
   HydratedDocument, Types,
 } from 'mongoose';
-import { Word } from 'src/modules/word/word.schema';
-import { Review as IReview } from 'src/types/review';
+import { Word } from '@/modules/word/word.schema';
+import { Review as IReview } from '@/types/review';
 
 @Schema()
 export class Review {

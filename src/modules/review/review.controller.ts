@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
-import { ApiResponseData } from 'src/types/api';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewService } from './review.service';
+import { ApiResponseData } from '@/types/api';
 
 @Controller('review')
 export class ReviewController {

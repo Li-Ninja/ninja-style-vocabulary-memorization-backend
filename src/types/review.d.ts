@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
-import { ReviewDocument } from 'src/modules/review/review.schema';
-import { WordDocument } from 'src/modules/word/word.schema';
 import { WordText } from './word';
+import { ReviewDocument } from '@/modules/review/review.schema';
+import { WordDocument } from '@/modules/word/word.schema';
 
 export interface Review {
   word_id: WordDocument['_id'];

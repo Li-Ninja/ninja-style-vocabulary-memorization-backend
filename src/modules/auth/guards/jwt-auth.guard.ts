@@ -4,9 +4,9 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { CustomRequest } from 'src/types/api.d';
 import { IS_PUBLIC_KEY } from '../auth.const';
 import { AuthService } from '../auth.service';
+import { CustomRequest } from '@/types/api.d';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {

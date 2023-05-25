@@ -16,10 +16,10 @@ import {
   Request,
   Response,
 } from 'express';
-import { ApiResponseData } from 'src/types/api';
 import { CreateWordDto } from './dto/create-word.dto';
 import { UpdateWordDto } from './dto/update-word.dto';
 import { WordService } from './word.service';
+import { ApiResponseData } from '@/types/api';
 
 @Controller('word')
 export class WordController {

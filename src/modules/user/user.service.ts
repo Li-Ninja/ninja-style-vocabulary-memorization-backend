@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-import { ReadAuthLoginDto } from 'src/modules/auth/dto/read-authLogin.dto';
-import { MongoUserGet } from 'src/types/user';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   User, UserDocument,
 } from './user.schema';
+import { ReadAuthLoginDto } from '@/modules/auth/dto/read-authLogin.dto';
+import { MongoUserGet } from '@/types/user';
 
 @Injectable()
 export class UserService {

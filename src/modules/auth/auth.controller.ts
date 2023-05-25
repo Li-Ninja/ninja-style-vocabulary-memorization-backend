@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
-import { ApiResponseData } from 'src/types/api';
 import { SkipJwtAuth } from './auth.const';
 import { AuthService } from './auth.service';
 import { ReadAuthLoginDto } from './dto/read-authLogin.dto';
+import { ApiResponseData } from '@/types/api';
 
 @Controller('auth')
 export class AuthController {

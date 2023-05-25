@@ -8,9 +8,9 @@ import {
 import {
   Server, Socket,
 } from 'socket.io';
-import { corsOrigin } from 'src/constants/config.constant';
-import { ApiResponseData } from 'src/types/api';
 import { AuthService } from '../auth/auth.service';
+import { corsOrigin } from '@/constants/config.constant';
+import { ApiResponseData } from '@/types/api';
 
 @WebSocketGateway({
   cors: {

@@ -3,7 +3,7 @@ import {
   IsNotEmpty,
   IsString,
 } from 'class-validator';
-import { UserDocument } from 'src/modules/user/user.schema';
+import { UserDocument } from '@/modules/user/user.schema';
 
 export class ReadAuthLoginDto {
   @IsNotEmpty()

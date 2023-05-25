@@ -5,12 +5,12 @@ import Decimal from 'decimal.js';
 import {
   Model, Types,
 } from 'mongoose';
-import { MongoReviewGet } from 'src/types/review';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReadReviewWordDto } from './dto/read-reviewWord.dto';
 import {
   Review, ReviewDocument,
 } from './review.schema';
+import { MongoReviewGet } from '@/types/review';
 
 @Injectable()
 export class ReviewService {

@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as dayjs from 'dayjs';
 import { Model } from 'mongoose';
-import { LanguageEnum } from 'src/enums/common.enum';
-import { CreateReviewDto } from 'src/modules/review/dto/create-review.dto';
-import { ReviewService } from 'src/modules/review/review.service';
 import { CreateWordDto } from './dto/create-word.dto';
 import { UpdateWordDto } from './dto/update-word.dto';
 import {
   Word, WordDocument,
 } from './word.schema';
+import { LanguageEnum } from '@/enums/common.enum';
+import { CreateReviewDto } from '@/modules/review/dto/create-review.dto';
+import { ReviewService } from '@/modules/review/review.service';
 
 @Injectable()
 export class WordService {
