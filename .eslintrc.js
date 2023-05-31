@@ -8,6 +8,7 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   extends: [
     '@ninjaccc/eslint-config',
+    '@ninjaccc/eslint-config/jest'
   ],
   rules: {
     'no-console': 'off',
