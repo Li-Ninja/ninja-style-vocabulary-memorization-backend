@@ -57,9 +57,9 @@ export class WordController {
     res.status(HttpStatus.OK).json();
   }
 
-  @Delete(':id')
-  // TODO: delete
-  remove(@Param('id') id: string) {
-    return this.wordService.remove(id);
-  }
+  // @Delete(':id')
+  // // TODO: delete
+  // remove(@Param('id') id: string) {
+  //   return this.wordService.remove(id);
+  // }
 }
