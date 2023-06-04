@@ -7,7 +7,7 @@ module.exports = {
     'json',
     'ts',
   ],
-  rootDir: 'src',
+  rootDir: '.',
   testRegex: '.*\\.spec\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
@@ -20,7 +20,7 @@ module.exports = {
   roots: ['<rootDir>'],
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/../',
+    prefix: '<rootDir>',
   }),
   watchPlugins: [
     'jest-watch-typeahead/filename',
