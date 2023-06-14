@@ -12,7 +12,7 @@ export class CronService {
     private readonly socketGateway: SocketGateway,
   ) {}
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async handleWordReviewNotify() {
     const wordList = await this.reviewService.getWordList();
 
