@@ -18,7 +18,7 @@ export class ReviewService {
     @InjectModel(Review.name) private readonly reviewModel: Model<ReviewDocument>,
   ) {}
 
-  async getWordList() {
+  async getWordList(count = 50) {
     const now = dayjs().toDate();
 
     return await this.reviewModel.aggregate()
@@ -37,6 +37,7 @@ export class ReviewService {
           $first: '$$ROOT',
         },
       })
+      .sample(count)
       .lookup({
         from: 'words',
         let: {

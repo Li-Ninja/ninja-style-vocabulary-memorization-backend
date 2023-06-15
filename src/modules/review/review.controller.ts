@@ -5,11 +5,15 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Res,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiQuery, ApiResponse,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { ReadReviewWordDto } from './dto/read-reviewWord.dto';
 import { ReviewService } from './review.service';
 import { ApiResponseData } from '@/types/api';
 
@@ -21,9 +25,17 @@ export class ReviewController {
 
   @Get('wordList')
   @ApiResponse({ status: 200, description: 'success' })
+  @ApiQuery({ name: 'count', required: false, type: Number })
   @HttpCode(HttpStatus.OK)
-  async getList() {
-    const data = await this.reviewService.getWordList();
+  async getList(@Query('count') count?: string) {
+    const countNumber = Number(count);
+    let data: ReadReviewWordDto[] = [];
+
+    if (Number.isNaN(countNumber) || countNumber > 50) {
+      data = await this.reviewService.getWordList();
+    } else {
+      data = await this.reviewService.getWordList(countNumber);
+    }
 
     return { data } as ApiResponseData;
   }
