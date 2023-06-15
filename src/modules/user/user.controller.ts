@@ -1,12 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
+  Post,
   Res,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -22,5 +25,14 @@ export class UserController {
     res.json(data);
   }
 
-  // TODO create account
+  @Post()
+  @ApiResponse({ status: 200, description: 'success' })
+  async create(
+    @Body() createUser: CreateUserDto,
+    @Res() res: Response,
+  ) {
+    await this.userService.create(createUser);
+
+    res.status(HttpStatus.OK).json();
+  }
 }
