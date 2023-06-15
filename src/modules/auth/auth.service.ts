@@ -15,7 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateToken(headers: CustomRequest['headers']): Promise<{ _id: string; account: string }> {
+  async validateToken(headers: CustomRequest['headers']): Promise<{ user_id: string; account: string }> {
     const token = AuthService.extractTokenFromHeader(headers);
 
     if (!token) {
@@ -23,7 +23,7 @@ export class AuthService {
     }
 
     try {
-      const user: { _id: string; account: string } = await this.jwtService.verifyAsync(token, {
+      const user: { user_id: string; account: string } = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
 
@@ -46,7 +46,7 @@ export class AuthService {
     if (isValid) {
       const token = await this.jwtService.signAsync(
         {
-          id: userList[0]._id,
+          user_id: userList[0]._id,
           account: userList[0].account,
         },
         {

@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as dayjs from 'dayjs';
-import { Model } from 'mongoose';
+import {
+  Model, Types,
+} from 'mongoose';
 import { CreateWordDto } from './dto/create-word.dto';
 import { UpdateWordDto } from './dto/update-word.dto';
 import {
@@ -18,10 +20,14 @@ export class WordService {
     private reviewService: ReviewService,
   ) {}
 
-  async getAll() {
-    const list = await this.wordModel.aggregate().sort({
-      updateAt: 'desc',
-    });
+  async getAll(userId: string) {
+    const list = await this.wordModel.aggregate()
+      .match({
+        user_id: new Types.ObjectId(userId),
+      })
+      .sort({
+        updateAt: 'desc',
+      });
 
     return list;
   }
@@ -30,10 +36,11 @@ export class WordService {
     return this.wordModel.findById(id);
   }
 
-  async create(word: CreateWordDto[]) {
+  async create(userId: string, word: CreateWordDto[]) {
     const dateTime = dayjs();
 
     const data: Word[] = word.map(item => ({
+      user_id: new Types.ObjectId(userId),
       text: item,
       tags: [],
       // TODO data from frontend
@@ -47,6 +54,7 @@ export class WordService {
 
     const wordList = await this.wordModel.insertMany(data);
     const initialReviewList: CreateReviewDto[] = wordList.map(item => ({
+      user_id: new Types.ObjectId(userId),
       word_id: item._id,
       isCorrect: null,
       reviewInfo: {
@@ -57,7 +65,7 @@ export class WordService {
       },
     }));
 
-    await this.reviewService.create(initialReviewList, true);
+    await this.reviewService.create(userId, initialReviewList, true);
 
     return;
   }

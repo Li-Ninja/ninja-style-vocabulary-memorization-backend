@@ -1,9 +1,11 @@
 import { Dayjs } from 'dayjs';
 import { WordText } from './word';
 import { ReviewDocument } from '@/modules/review/review.schema';
+import { UserDocument } from '@/modules/user/user.schema';
 import { WordDocument } from '@/modules/word/word.schema';
 
 export interface Review {
+  user_id: UserDocument['_id'];
   word_id: WordDocument['_id'];
   isCorrect: boolean | null;
   createAt: Dayjs;

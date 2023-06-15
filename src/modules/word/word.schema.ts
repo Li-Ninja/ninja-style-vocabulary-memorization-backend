@@ -5,10 +5,24 @@ import {
 } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Dayjs } from 'dayjs';
-import { HydratedDocument } from 'mongoose';
+import {
+  HydratedDocument, Types,
+} from 'mongoose';
+import { User } from '@/modules/user/user.schema';
+import {
+  Word as IWord, WordText,
+} from '@/types/word';
 
 @Schema()
 export class Word {
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @ApiProperty({
+    example: 0,
+    format: 'string',
+    required: true,
+  })
+    user_id: IWord['user_id'];
+
   @Prop({ type: Array, required: true })
   @ApiProperty({
     example: ['life', 'restaurant'],

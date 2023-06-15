@@ -8,11 +8,20 @@ import * as dayjs from 'dayjs';
 import {
   HydratedDocument, Types,
 } from 'mongoose';
+import { User } from '@/modules/user/user.schema';
 import { Word } from '@/modules/word/word.schema';
 import { Review as IReview } from '@/types/review';
 
 @Schema()
 export class Review {
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @ApiProperty({
+    example: 0,
+    format: 'string',
+    required: true,
+  })
+    user_id: IReview['user_id'];
+
   @Prop({ type: Types.ObjectId, ref: Word.name, required: true })
   @ApiProperty({
     example: 0,

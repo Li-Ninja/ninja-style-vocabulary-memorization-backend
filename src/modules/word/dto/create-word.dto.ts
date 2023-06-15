@@ -9,6 +9,15 @@ export class CreateWordDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
+    example: '0',
+    format: 'string',
+    required: true,
+  })
+  readonly user_id: WordDocument['user_id'];
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
     example: 'card',
     format: 'string',
     required: true,

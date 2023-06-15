@@ -18,7 +18,7 @@ export class ReviewService {
     @InjectModel(Review.name) private readonly reviewModel: Model<ReviewDocument>,
   ) {}
 
-  async getWordList(count = 50) {
+  async getWordList(userId: string, count = 50) {
     const now = dayjs().toDate();
 
     return await this.reviewModel.aggregate()
@@ -26,6 +26,7 @@ export class ReviewService {
         'reviewInfo.nextReviewAt': {
           $lte: now,
         },
+        user_id: new Types.ObjectId(userId),
       })
       .sort({
         word_id: 1,
@@ -84,8 +85,11 @@ export class ReviewService {
       .exec() as ReadReviewWordDto[];
   }
 
-  async getLogList() {
+  async getLogList(userId: string) {
     return await this.reviewModel.aggregate()
+      .match({
+        user_id: new Types.ObjectId(userId),
+      })
       .lookup({
         from: 'words',
         localField: 'word_id',
@@ -125,9 +129,10 @@ export class ReviewService {
       .exec() as MongoReviewGet[];
   }
 
-  async create(reviewLogs: CreateReviewDto[], isInitial = false) {
+  async create(userId: string, reviewLogs: CreateReviewDto[], isInitial = false) {
     const dateTime = dayjs();
     const data: Review[] = reviewLogs.map(reviewLog => ({
+      user_id: new Types.ObjectId(userId),
       word_id: new Types.ObjectId(reviewLog.word_id),
       isCorrect: reviewLog.isCorrect,
       createAt: dayjs(),

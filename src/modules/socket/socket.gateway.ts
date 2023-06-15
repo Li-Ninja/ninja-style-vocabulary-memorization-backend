@@ -9,6 +9,7 @@ import {
   Server, Socket,
 } from 'socket.io';
 import { AuthService } from '../auth/auth.service';
+import { ReviewService } from '../review/review.service';
 import { corsOrigin } from '@/constants/config.constant';
 import { ApiResponseData } from '@/types/api';
 
@@ -22,7 +23,10 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private connectedClients: Map<string, Socket> = new Map<string, Socket>();
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly reviewService: ReviewService,
+  ) {}
 
   /** is required by OnGatewayConnection */
   async handleConnection(client: Socket) {
@@ -31,7 +35,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       // TODO Log
       console.log('handleConnection successfully', client.id, user);
-      this.connectedClients.set(user.account, client);
+      this.connectedClients.set(user.user_id, client);
     } catch {
       // TODO Log
       console.log('handleConnection', client.id, 'invalid token');
@@ -52,9 +56,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('wordReviewNotify')
-  async sendWordReviewNotify(count: number) {
-    // TODO only send to user who has word to review
-    this.connectedClients.forEach(connectedClient => {
+  async sendWordReviewNotify() {
+    this.connectedClients.forEach(async (connectedClient, userId) => {
+      const list = await this.reviewService.getWordList(userId);
+      const count = list.length;
+
+      if (count === 0) {
+        return;
+      }
+
       const res: ApiResponseData = {
         data: {
           hasReviewWord: true,

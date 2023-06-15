@@ -9,4 +9,5 @@ export interface ApiResponseData {
 
 export interface CustomRequest extends Request {
   userAccount: string;
+  userId: string;
 }

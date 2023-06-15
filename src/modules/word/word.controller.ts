@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -12,14 +11,12 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import {
-  Request,
-  Response,
-} from 'express';
+import { Response } from 'express';
 import { CreateWordDto } from './dto/create-word.dto';
 import { UpdateWordDto } from './dto/update-word.dto';
 import { WordService } from './word.service';
 import { ApiResponseData } from '@/types/api';
+import { CustomRequest } from '@/types/api.d';
 
 @Controller('word')
 export class WordController {
@@ -27,8 +24,8 @@ export class WordController {
 
   @Get('list')
   @HttpCode(HttpStatus.OK)
-  async getAll(@Req() _req: Request, @Res() res: Response) {
-    const data = await this.wordService.getAll();
+  async getAll(@Req() req: CustomRequest, @Res() res: Response) {
+    const data = await this.wordService.getAll(req.userId);
 
     res.json({
       data,
@@ -44,8 +41,12 @@ export class WordController {
 
   @Post()
   @ApiResponse({ status: 200, description: 'success' })
-  async create(@Body() createWords: CreateWordDto[], @Res() res: Response) {
-    await this.wordService.create(createWords);
+  async create(
+    @Body() createWords: CreateWordDto[],
+    @Req() req: CustomRequest,
+    @Res() res: Response,
+  ) {
+    await this.wordService.create(req.userId, createWords);
 
     res.status(HttpStatus.OK).json();
   }

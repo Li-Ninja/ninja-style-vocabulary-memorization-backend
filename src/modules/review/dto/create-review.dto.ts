@@ -16,6 +16,15 @@ export class CreateReviewDto {
     format: 'string',
     required: true,
   })
+  readonly user_id: ReviewDocument['user_id'];
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    example: '0',
+    format: 'string',
+    required: true,
+  })
   readonly word_id: ReviewDocument['word_id'];
 
   @IsNotEmpty()
