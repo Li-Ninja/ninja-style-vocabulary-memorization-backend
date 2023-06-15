@@ -126,6 +126,7 @@ export class ReviewService {
   }
 
   async create(reviewLogs: CreateReviewDto[], isInitial = false) {
+    const dateTime = dayjs();
     const data: Review[] = reviewLogs.map(reviewLog => ({
       word_id: new Types.ObjectId(reviewLog.word_id),
       isCorrect: reviewLog.isCorrect,
@@ -133,20 +134,23 @@ export class ReviewService {
       reviewInfo: {
         ratio: reviewLog.reviewInfo.ratio,
         minutes: reviewLog.reviewInfo.minutes,
-        count: reviewLog.reviewInfo.count + 1,
+        count: reviewLog.isCorrect ? reviewLog.reviewInfo.count + 1 : reviewLog.reviewInfo.count,
         initialReviewAt: reviewLog.reviewInfo.initialReviewAt,
         // Geometric progression
         nextReviewAt:
           isInitial
             ? reviewLog.reviewInfo.initialReviewAt
-            : dayjs(reviewLog.reviewInfo.initialReviewAt)
-              .add(
-                new Decimal(reviewLog.reviewInfo.minutes)
-                  .mul(new Decimal(reviewLog.reviewInfo.ratio)
-                    .pow(reviewLog.reviewInfo.count))
-                  .toNumber(),
-                'minutes',
-              ),
+            : (
+              reviewLog.isCorrect
+                ? dateTime
+                  .add(
+                    new Decimal(reviewLog.reviewInfo.minutes)
+                      .mul(new Decimal(reviewLog.reviewInfo.ratio)
+                        .pow(reviewLog.reviewInfo.count))
+                      .toNumber(),
+                    'minutes',
+                  )
+                : dateTime),
       },
     }));
 
