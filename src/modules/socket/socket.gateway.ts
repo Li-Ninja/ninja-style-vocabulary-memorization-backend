@@ -36,10 +36,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // TODO Log
       console.log('handleConnection successfully', client.id, user);
       this.connectedClients.set(user.user_id, client);
+      client.emit('check-connection', {
+        isSuccess: true,
+      });
     } catch {
       // TODO Log
-      console.log('handleConnection', client.id, 'invalid token');
-      client.disconnect();
+      client.emit('check-connection', {
+        isSuccess: false,
+      });
+      client.disconnect(false);
     }
   }
 
